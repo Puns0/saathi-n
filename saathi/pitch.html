@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAATHI — Student Innovation Pitch · SJB Institute of Technology</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --obsidian:#07080d; --navy:#0b1120; --panel:#111827; --panel2:#161f30;
+  --gold:#c9a84c; --gold-light:#e8c97a; --gold-dim:rgba(201,168,76,0.12);
+  --gold-border:rgba(201,168,76,0.28); --white:#f4f1eb; --muted:rgba(244,241,235,0.52);
+  --teal:#2dd4bf; --blue:#60a5fa; --rose:#fb7185; --green:#4ade80;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--obsidian);color:var(--white);font-family:'Syne',sans-serif;overflow-x:hidden}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--obsidian)}
+::-webkit-scrollbar-thumb{background:var(--gold-border)}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:18px 52px;background:linear-gradient(to bottom,rgba(7,8,13,0.97) 60%,transparent);backdrop-filter:blur(2px)}
+.nav-brand{display:flex;align-items:center;gap:14px}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;letter-spacing:0.12em;color:var(--gold)}
+.nav-sep{width:1px;height:22px;background:var(--gold-border)}
+.nav-tag{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.18em;color:var(--muted);text-transform:uppercase}
+.nav-pills{display:flex;gap:6px}
+.npill{padding:5px 14px;border-radius:2px;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;border:1px solid var(--gold-border);color:var(--muted);cursor:pointer;transition:all .25s;text-decoration:none;background:none}
+.npill:hover,.npill.active{background:var(--gold-dim);color:var(--gold);border-color:var(--gold)}
+
+/* PROGRESS */
+#progress{position:fixed;top:0;left:0;height:2px;z-index:300;background:linear-gradient(90deg,var(--gold),var(--teal));transition:width .2s}
+
+/* SECTIONS */
+section{min-height:100vh;position:relative;display:flex;align-items:center;justify-content:center;padding:100px 0 60px;overflow:hidden}
+.bg-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(201,168,76,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,.035) 1px,transparent 1px);background-size:64px 64px}
+.glow-c{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 55% at 50% 48%,rgba(201,168,76,.07) 0%,transparent 70%)}
+.glow-l{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 80% at -5% 50%,rgba(45,212,191,.06) 0%,transparent 60%)}
+.glow-r{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 80% at 105% 50%,rgba(96,165,250,.07) 0%,transparent 60%)}
+.wrap{width:100%;max-width:1180px;padding:0 52px;position:relative;z-index:2}
+.slide-tag{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.slide-tag::after{content:'';flex:1;height:1px;background:var(--gold-border);max-width:80px}
+.ca{position:absolute;width:36px;height:36px;pointer-events:none}
+.ca-tl{top:88px;left:52px;border-top:1px solid var(--gold-border);border-left:1px solid var(--gold-border)}
+.ca-br{bottom:40px;right:52px;border-bottom:1px solid var(--gold-border);border-right:1px solid var(--gold-border)}
+.ghost-num{position:absolute;bottom:36px;right:52px;font-family:'Cormorant Garamond',serif;font-size:10rem;font-weight:300;line-height:1;color:rgba(201,168,76,.035);pointer-events:none;user-select:none}
+
+/* ANIMATIONS */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-l{opacity:0;transform:translateX(-28px);transition:opacity .8s ease,transform .8s ease}
+.reveal-l.visible{opacity:1;transform:translateX(0)}
+.reveal-r{opacity:0;transform:translateX(28px);transition:opacity .8s ease,transform .8s ease}
+.reveal-r.visible{opacity:1;transform:translateX(0)}
+.d1{transition-delay:.1s}.d2{transition-delay:.22s}.d3{transition-delay:.34s}.d4{transition-delay:.46s}.d5{transition-delay:.58s}.d6{transition-delay:.7s}
+@keyframes heroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+
+/* ── §1 HERO ── */
+#hero{background:var(--obsidian)}
+.hero-inner{text-align:center;animation:heroFloat 6s ease-in-out infinite}
+.hero-eyebrow{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.35em;color:var(--gold);text-transform:uppercase;margin-bottom:28px;display:inline-flex;align-items:center;gap:14px}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';width:44px;height:1px;background:var(--gold-border)}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(5.5rem,14vw,11rem);font-weight:300;line-height:.88;letter-spacing:-.01em;background:linear-gradient(145deg,var(--white) 0%,var(--gold-light) 45%,var(--white) 90%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-size:clamp(1rem,2.5vw,1.5rem);font-weight:300;font-style:italic;color:var(--muted);margin-top:18px;letter-spacing:.04em}
+.hero-line{width:1px;height:70px;background:linear-gradient(to bottom,transparent,var(--gold-border),transparent);margin:36px auto}
+.hero-badges{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.hbadge{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:2px;border:1px solid var(--gold-border);background:var(--gold-dim);font-family:'DM Mono',monospace;font-size:.66rem;letter-spacing:.1em;color:var(--gold)}
+.hbadge-dot{width:5px;height:5px;border-radius:50%;background:var(--teal);animation:pulse 2s infinite}
+.hero-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.1}
+
+/* ── §2 WHO WE ARE ── */
+#who{background:var(--navy)}
+.who-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.who-left h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,3.6rem);font-weight:300;line-height:1.15;margin-bottom:22px}
+.who-left h2 em{font-style:italic;color:var(--gold)}
+.who-left p{font-size:.92rem;line-height:1.85;color:rgba(244,241,235,.7);margin-bottom:14px}
+.who-left blockquote{margin-top:24px;border-left:2px solid var(--gold);padding-left:18px;font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-style:italic;color:var(--gold-light);line-height:1.6}
+.who-left blockquote cite{display:block;margin-top:8px;font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.12em;color:var(--muted);font-style:normal}
+.hack-card{background:var(--panel);border:1px solid var(--gold-border);border-radius:4px;padding:32px;position:relative;overflow:hidden}
+.hack-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--teal),var(--gold))}
+.hack-header{display:flex;align-items:center;gap:14px;margin-bottom:24px}
+.hack-icon{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,var(--gold-dim),rgba(45,212,191,.15));border:1px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+.hack-header h3{font-size:1rem;font-weight:700}
+.hack-header p{font-size:.75rem;color:var(--muted);margin-top:2px}
+.hack-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px}
+.hstat{background:rgba(0,0,0,.25);border-radius:3px;padding:14px;border:1px solid rgba(255,255,255,.05);text-align:center}
+.hstat-val{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--gold);display:block;line-height:1}
+.hstat-label{font-size:.7rem;color:var(--muted);margin-top:4px}
+.hack-features{display:flex;flex-direction:column;gap:8px}
+.hf-row{display:flex;align-items:center;gap:10px;font-size:.8rem;color:rgba(244,241,235,.75)}
+.hf-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0}
+
+/* ── §3 PROBLEM ── */
+#problem{background:var(--obsidian)}
+.prob-header{margin-bottom:48px}
+.prob-header h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,3.4rem);font-weight:300}
+.prob-header h2 em{font-style:italic;color:var(--gold)}
+.prob-header p{margin-top:12px;font-size:.88rem;color:var(--muted);line-height:1.8;max-width:680px}
+.prob-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.pcard{background:var(--panel);padding:28px 24px;border-top:2px solid transparent;transition:all .3s;position:relative;overflow:hidden;cursor:default}
+.pcard::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--gold-dim) 0%,transparent 55%);opacity:0;transition:opacity .3s}
+.pcard:hover{border-top-color:var(--gold)}
+.pcard:hover::after{opacity:1}
+.pcard-icon{font-size:1.7rem;display:block;margin-bottom:16px}
+.pcard h3{font-size:.88rem;font-weight:700;margin-bottom:8px}
+.pcard p{font-size:.78rem;color:var(--muted);line-height:1.75}
+.pcard-pill{margin-top:14px;display:inline-block;font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;padding:3px 10px;border-radius:2px;background:rgba(251,113,133,.12);color:var(--rose);border:1px solid rgba(251,113,133,.2)}
+
+/* ── §4 INNOVATION ── */
+#innovation{background:var(--navy)}
+.inno-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+.inno-left h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4.5vw,3.2rem);font-weight:300;line-height:1.2;margin-bottom:18px}
+.inno-left h2 em{font-style:italic;color:var(--gold)}
+.inno-left p{font-size:.87rem;color:var(--muted);line-height:1.85;margin-bottom:18px}
+.inno-compare{width:100%;border-collapse:collapse;margin-top:22px}
+.inno-compare th{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.15em;padding:10px 14px;text-align:left;border-bottom:1px solid var(--gold-border);color:var(--gold);text-transform:uppercase}
+.inno-compare td{padding:10px 14px;font-size:.78rem;border-bottom:1px solid rgba(255,255,255,.05);color:var(--muted)}
+.inno-compare td:first-child{color:var(--white);font-weight:600;font-size:.75rem}
+.good{color:var(--teal)!important}.bad{color:var(--rose)!important}
+.flow-box{background:rgba(0,0,0,.35);border:1px solid var(--gold-border);border-radius:4px;padding:24px}
+.flow-box-title{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:20px}
+.fs{display:flex;align-items:flex-start;gap:14px;padding:10px 0;position:relative}
+.fs:not(:last-child)::after{content:'';position:absolute;left:14px;top:38px;width:1px;height:calc(100% - 8px);background:linear-gradient(to bottom,var(--gold-border) 0%,transparent 100%)}
+.fs-num{width:29px;height:29px;border-radius:50%;flex-shrink:0;background:var(--gold-dim);border:1px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:.62rem;color:var(--gold)}
+.fs-body h4{font-size:.78rem;font-weight:700;margin-bottom:2px}
+.fs-body p{font-size:.69rem;color:var(--muted);line-height:1.5}
+.fs-chip{display:inline-block;margin-top:4px;font-family:'DM Mono',monospace;font-size:.55rem;padding:2px 7px;border-radius:2px;background:rgba(45,212,191,.1);color:var(--teal);border:1px solid rgba(45,212,191,.2)}
+
+/* ── §5 FEATURES ── */
+#features{background:var(--obsidian)}
+.feat-header{margin-bottom:40px}
+.feat-header h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,3.4rem);font-weight:300}
+.feat-header h2 em{color:var(--gold);font-style:italic}
+.tabs{display:flex;border-bottom:1px solid var(--gold-border);margin-bottom:32px;gap:0}
+.tab{padding:10px 22px;font-size:.78rem;font-weight:700;letter-spacing:.04em;cursor:pointer;transition:all .25s;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--muted);background:none;border-top:none;border-left:none;border-right:none;font-family:'Syne',sans-serif}
+.tab:hover{color:var(--white)}.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.panel{display:none}
+.panel.active{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;animation:fadePanel .35s ease}
+@keyframes fadePanel{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.fcard{background:var(--panel);border-radius:3px;padding:22px;border:1px solid rgba(255,255,255,.05);transition:all .25s;cursor:default}
+.fcard:hover{border-color:var(--gold-border);transform:translateY(-3px)}
+.fcard-top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.fcard-icon{width:34px;height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.fcard-top h3{font-size:.82rem;font-weight:700}
+.fcard p{font-size:.74rem;color:var(--muted);line-height:1.75}
+.fcard-tag{margin-top:12px;display:inline-block;font-family:'DM Mono',monospace;font-size:.57rem;letter-spacing:.1em;padding:2px 8px;border-radius:2px}
+.tag-live{background:rgba(74,222,128,.1);color:var(--green);border:1px solid rgba(74,222,128,.2)}
+.tag-deploy{background:rgba(96,165,250,.1);color:var(--blue);border:1px solid rgba(96,165,250,.2)}
+.tag-wip{background:rgba(201,168,76,.1);color:var(--gold);border:1px solid var(--gold-border)}
+
+/* ── §6 ARCHITECTURE ── */
+#arch{background:var(--navy)}
+.arch-header{margin-bottom:36px}
+.arch-header h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4.5vw,3.2rem);font-weight:300}
+.arch-header h2 em{color:var(--gold);font-style:italic}
+.arch-diagram{background:rgba(0,0,0,.4);border:1px solid var(--gold-border);border-radius:4px;padding:32px 24px}
+.arch-tier1{display:flex;align-items:center;justify-content:center;margin-bottom:28px;gap:8px}
+.anode{background:var(--panel2);border-radius:4px;padding:16px 20px;text-align:center;border:1px solid rgba(255,255,255,.07);min-width:160px;transition:all .3s;cursor:default}
+.anode:hover{border-color:var(--gold-border);transform:translateY(-3px)}
+.anode.gold{border-color:var(--gold-border);background:var(--gold-dim)}
+.anode.teal{border-color:rgba(45,212,191,.3);background:rgba(45,212,191,.07)}
+.anode-icon{font-size:1.6rem;display:block;margin-bottom:8px}
+.anode h4{font-size:.72rem;font-weight:700;margin-bottom:3px}
+.anode.gold h4{color:var(--gold)}.anode.teal h4{color:var(--teal)}
+.anode p{font-size:.62rem;color:var(--muted);line-height:1.5}
+.arch-arr{display:flex;flex-direction:column;align-items:center;padding:0 12px;gap:3px;flex-shrink:0;color:var(--gold-border)}
+.arch-arr span{font-family:'DM Mono',monospace;font-size:.52rem;color:var(--muted);text-align:center;white-space:nowrap}
+.arch-divider{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.arch-divider span{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;white-space:nowrap}
+.arch-divider::before,.arch-divider::after{content:'';flex:1;height:1px;background:var(--gold-border)}
+.arch-tier2{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.amini{background:rgba(0,0,0,.3);border-radius:3px;padding:14px 10px;text-align:center;border:1px solid rgba(255,255,255,.05);transition:all .25s}
+.amini:hover{border-color:var(--gold-border)}
+.amini-icon{font-size:1.1rem;display:block;margin-bottom:6px}
+.amini h5{font-size:.66rem;font-weight:700;margin-bottom:2px}
+.amini p{font-size:.58rem;color:var(--muted);line-height:1.4}
+
+/* ── §7 METRICS ── */
+#metrics{background:var(--obsidian)}
+.met-header{margin-bottom:44px}
+.met-header h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,3.4rem);font-weight:300}
+.met-header h2 em{color:var(--gold);font-style:italic}
+.big-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-bottom:28px}
+.bstat{background:var(--panel);padding:28px 20px;border-bottom:2px solid transparent;transition:border-color .3s;text-align:center}
+.bstat:hover{border-bottom-color:var(--gold)}
+.bstat-val{font-family:'Cormorant Garamond',serif;font-size:3.2rem;font-weight:300;color:var(--gold);display:block;line-height:1}
+.bstat-label{font-size:.72rem;color:var(--muted);line-height:1.5;margin-top:6px}
+.bstat-note{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--teal);margin-top:6px}
+.chart-duo{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.chart-card{background:var(--panel);border-radius:3px;padding:24px}
+.chart-card h4{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
+.bar-r{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.bar-lbl{width:120px;font-size:.72rem;color:var(--muted);text-align:right;flex-shrink:0}
+.bar-track{flex:1;height:7px;background:rgba(255,255,255,.05);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;width:0;transition:width 1.4s cubic-bezier(.4,0,.2,1)}
+.bar-val{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--muted);width:36px}
+.cost-list{display:flex;flex-direction:column;gap:10px}
+.cost-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.cost-name{font-size:.78rem;color:var(--muted)}
+.cost-chip{font-family:'DM Mono',monospace;font-size:.68rem;padding:5px 12px;border-radius:2px}
+.cost-high{background:rgba(251,113,133,.12);color:var(--rose);border:1px solid rgba(251,113,133,.2)}
+.cost-zero{background:rgba(74,222,128,.12);color:var(--green);border:1px solid rgba(74,222,128,.2)}
+.cost-low{background:rgba(96,165,250,.12);color:var(--blue);border:1px solid rgba(96,165,250,.2)}
+
+/* ── §8 ROADMAP ── */
+#roadmap{background:var(--navy)}
+.rm-header{margin-bottom:40px}
+.rm-header h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,3.4rem);font-weight:300}
+.rm-header h2 em{color:var(--gold);font-style:italic}
+.rm-header p{margin-top:12px;font-size:.87rem;color:var(--muted);line-height:1.8}
+.phases{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:28px}
+.phase{background:var(--panel);padding:28px 22px;border-top:3px solid transparent;transition:transform .3s;cursor:default}
+.phase:hover{transform:translateY(-5px)}
+.ph1{border-top-color:var(--gold)}.ph2{border-top-color:var(--teal)}.ph3{border-top-color:var(--blue)}
+.phase-badge{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px}
+.ph1 .phase-badge{color:var(--gold)}.ph2 .phase-badge{color:var(--teal)}.ph3 .phase-badge{color:var(--blue)}
+.phase h3{font-size:.95rem;font-weight:700;margin-bottom:4px}
+.phase-dur{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--muted);margin-bottom:18px}
+.phase-list{list-style:none}
+.phase-list li{font-size:.77rem;color:rgba(244,241,235,.72);padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;align-items:flex-start;gap:8px;line-height:1.55}
+.phase-list li::before{content:'→';color:var(--muted);flex-shrink:0;margin-top:1px}
+.stack-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.st-pill{border:1px solid var(--gold-border);border-radius:2px;padding:12px 10px;text-align:center;background:var(--gold-dim);transition:all .25s}
+.st-pill:hover{transform:translateY(-2px);background:rgba(201,168,76,.18)}
+.st-icon{font-size:1.2rem;display:block;margin-bottom:6px}
+.st-name{font-size:.68rem;font-weight:700;color:var(--gold);margin-bottom:2px}
+.st-desc{font-size:.58rem;color:var(--muted)}
+
+/* ── §9 CTA ── */
+#cta{background:var(--obsidian)}
+.cta-wrap{text-align:center;max-width:800px;margin:0 auto;position:relative;z-index:2}
+.cta-eyebrow{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.32em;color:var(--gold);text-transform:uppercase;margin-bottom:26px;display:inline-flex;align-items:center;gap:14px}
+.cta-eyebrow::before,.cta-eyebrow::after{content:'';width:40px;height:1px;background:var(--gold-border)}
+.cta-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,7vw,5.5rem);font-weight:300;line-height:1.08;margin-bottom:24px}
+.cta-title em{font-style:italic;color:var(--gold)}
+.cta-body{font-size:.92rem;color:var(--muted);line-height:1.85;margin-bottom:48px;max-width:520px;margin-left:auto;margin-right:auto}
+.cta-offers{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:44px}
+.offer-card{border:1px solid var(--gold-border);padding:18px 22px;background:var(--gold-dim);border-radius:2px;text-align:left;min-width:180px}
+.offer-card h4{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+.offer-card p{font-size:.82rem;color:var(--white)}
+.cta-btn{display:inline-flex;align-items:center;gap:10px;padding:14px 34px;background:var(--gold);color:var(--obsidian);font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;border:none;cursor:pointer;border-radius:2px;transition:all .3s;text-decoration:none}
+.cta-btn:hover{background:var(--gold-light);transform:translateY(-3px);box-shadow:0 14px 40px rgba(201,168,76,.28)}
+.cta-note{margin-top:20px;font-size:.75rem;color:var(--muted)}
+.cta-line{width:1px;height:60px;background:linear-gradient(to bottom,transparent,var(--gold-border),transparent);margin:32px auto}
+.team-row{display:flex;justify-content:center;gap:24px;margin-top:32px;flex-wrap:wrap}
+.team-chip{display:flex;align-items:center;gap:10px;padding:10px 18px;border-radius:2px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03)}
+.team-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--gold-dim),rgba(45,212,191,.15));border:1px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-size:.9rem}
+.team-info h5{font-size:.78rem;font-weight:700}
+.team-info p{font-size:.65rem;color:var(--muted)}
+
+/* FOOTER */
+footer{background:var(--obsidian);border-top:1px solid var(--gold-border);padding:20px 52px;display:flex;align-items:center;justify-content:space-between}
+footer p{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.12em;color:var(--muted)}
+footer .fl{color:var(--gold);font-style:normal}
+
+/* TEAM CARDS */
+.team-grid-full{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:32px;text-align:left}
+.team-card-full{background:var(--panel);border:1px solid var(--gold-border);border-radius:4px;padding:22px 18px;position:relative;overflow:hidden;transition:all .3s}
+.team-card-full::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--teal))}
+.team-card-full:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(201,168,76,.12)}
+.tc-avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--gold-dim),rgba(45,212,191,.18));border:1.5px solid var(--gold-border);display:flex;align-items:center;justify-content:center;margin-bottom:14px;font-size:1.4rem}
+.tc-name{font-size:.92rem;font-weight:700;color:var(--white);margin-bottom:12px}
+.tc-contact{display:flex;flex-direction:column;gap:7px}
+.tc-link{display:flex;align-items:center;gap:7px;font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted);text-decoration:none;transition:color .2s;letter-spacing:.03em}
+.tc-link:hover{color:var(--gold)}
+.tc-link svg{flex-shrink:0;opacity:.7}
+
+/* FLOW SIMULATION */
+.sim-section{margin-top:44px}
+.sim-title{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:24px;text-align:center}
+.sim-compare{display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:stretch;background:rgba(0,0,0,.3);border:1px solid var(--gold-border);border-radius:4px;overflow:hidden}
+.sim-col{padding:24px 22px}
+.sim-col-old{border-right:1px solid rgba(255,255,255,.06)}
+.sim-col-new{border-left:1px solid rgba(255,255,255,.06)}
+.sim-vs{display:flex;align-items:center;justify-content:center;padding:0 16px;background:rgba(201,168,76,.04);min-width:52px}
+.sim-vs span{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:var(--gold-border);writing-mode:vertical-rl}
+.sim-col-label{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.06)}
+.sim-col-old .sim-col-label{color:var(--rose)}
+.sim-col-new .sim-col-label{color:var(--teal)}
+.sim-step{display:flex;align-items:flex-start;gap:10px;padding:8px 0;font-size:.74rem;color:rgba(244,241,235,.72);line-height:1.55;border-bottom:1px solid rgba(255,255,255,.04)}
+.sim-step:last-child{border-bottom:none}
+.sim-step-icon{font-size:1rem;flex-shrink:0;margin-top:1px}
+.sim-step-body h5{font-size:.74rem;font-weight:700;color:var(--white);margin-bottom:1px}
+.sim-step-body p{font-size:.67rem;color:var(--muted)}
+.sim-badge{display:inline-block;font-family:'DM Mono',monospace;font-size:.55rem;padding:2px 8px;border-radius:2px;margin-top:4px}
+.sim-badge-bad{background:rgba(251,113,133,.12);color:var(--rose);border:1px solid rgba(251,113,133,.2)}
+.sim-badge-good{background:rgba(74,222,128,.12);color:var(--green);border:1px solid rgba(74,222,128,.2)}
+
+@media(max-width:920px){
+  .team-grid-full{grid-template-columns:1fr 1fr}
+  .sim-compare{grid-template-columns:1fr;grid-template-rows:auto auto auto}
+  .sim-vs{padding:10px;writing-mode:horizontal-tb;min-width:unset;border-top:1px solid var(--gold-border);border-bottom:1px solid var(--gold-border)}
+  .sim-vs span{writing-mode:horizontal-tb}
+  .sim-col-old{border-right:none}
+  .sim-col-new{border-left:none}
+}
+
+/* RESPONSIVE */
+@media(max-width:920px){
+  nav{padding:14px 24px}
+  .wrap{padding:0 24px}
+  .who-grid,.inno-grid{grid-template-columns:1fr;gap:40px}
+  .prob-grid{grid-template-columns:1fr 1fr}
+  .big-stats{grid-template-columns:1fr 1fr}
+  .phases{grid-template-columns:1fr}
+  .arch-tier1{flex-wrap:wrap;gap:12px}
+  .arch-arr{display:none}
+  .arch-tier2{grid-template-columns:repeat(3,1fr)}
+  .chart-duo{grid-template-columns:1fr}
+  .panel.active{grid-template-columns:1fr 1fr}
+  .stack-row{grid-template-columns:repeat(3,1fr)}
+  .nav-pills{display:none}
+  .ca,.ghost-num{display:none}
+}
+</style>
+</head>
+<body>
+
+<div id="progress" style="width: 0%;"></div>
+
+<nav id="navbar">
+  <div class="nav-brand">
+    <div class="nav-logo">SAATHI</div>
+    <div class="nav-sep"></div>
+    <div class="nav-tag">SJB Institute of Technology · Dental Clinic Pitch</div>
+  </div>
+  <div class="nav-pills">
+    <a class="npill" href="#who">About Us</a>
+    <a class="npill" href="#problem">Problem</a>
+    <a class="npill active" href="#innovation">Solution</a>
+    <a class="npill" href="#features">Features</a>
+    <a class="npill" href="#metrics">Impact</a>
+    <a class="npill" href="#roadmap">Roadmap</a>
+    <a class="npill" href="#cta">Contact</a>
+  </div>
+</nav>
+
+<!-- ══ §1 HERO ══ -->
+<section id="hero">
+  <div class="bg-grid"></div>
+  <div class="glow-c"></div>
+  <svg class="hero-svg" xmlns="http://www.w3.org/2000/svg">
+    <line x1="0" y1="38%" x2="100%" y2="62%" stroke="#c9a84c" stroke-width="0.5"></line>
+    <line x1="0" y1="62%" x2="100%" y2="38%" stroke="#c9a84c" stroke-width="0.5"></line>
+    <circle cx="50%" cy="50%" r="28%" fill="none" stroke="#c9a84c" stroke-width="0.4" stroke-dasharray="3 9"></circle>
+    <circle cx="50%" cy="50%" r="42%" fill="none" stroke="#c9a84c" stroke-width="0.25" stroke-dasharray="2 14"></circle>
+  </svg>
+  <div class="wrap">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">Student Innovation Pitch</div>
+      <div class="hero-title">SAATHI</div>
+      <div class="hero-sub">AI-Powered Voice &amp; Clinic Assistant — Built for Your Practice</div>
+      <div class="hero-line"></div>
+      <div class="hero-badges">
+        <div class="hbadge"><span class="hbadge-dot"></span>Built at Hackathon in 24 Hours</div>
+        <div class="hbadge"><span class="hbadge-dot"></span>Working Demo — Live Right Now</div>
+        <div class="hbadge"><span class="hbadge-dot"></span>🥈 Secured 2nd Place at Hackathon</div>
+        <div class="hbadge"><span class="hbadge-dot"></span>SJB Institute of Technology, Bengaluru</div>
+      </div>
+    </div>
+  </div>
+  <div class="ca ca-tl"></div>
+  <div class="ca ca-br"></div>
+</section>
+
+<!-- ══ §2 WHO WE ARE ══ -->
+<section id="who">
+  <div class="glow-l"></div>
+  <div class="ca ca-tl"></div>
+  <div class="ghost-num">02</div>
+  <div class="wrap">
+    <div class="who-grid">
+      <div class="who-left reveal reveal-l visible">
+        <div class="slide-tag">01 — Who We Are</div>
+        <h2>We're students who<br>built a <em>working</em> AI<br>system in 24 hours.</h2>
+        <p>We are a team of engineering students from <strong style="color:var(--white)">SJB Institute of Technology, Kengeri, Bengaluru</strong>. At a 24-hour hackathon, we designed and built SAATHI — a complete AI voice assistant — entirely from scratch. No templates. No pre-built bots. Real code, real integrations, real results.</p>
+        <p>SAATHI started as a solution for rural farmers: get AI advisory over a plain phone call, no internet required on their end. The system handles everything — auto-answering calls, understanding speech in 10+ Indian languages, generating responses, and speaking back — all on a laptop.</p>
+        <p>After the demo, a business connector who attended the event saw the potential for healthcare. That conversation led us here — to propose deploying SAATHI for your dental clinic.</p>
+        <blockquote>
+          "This could work in a live clinic right now."
+          <cite>— Sunil, Business Connector (after seeing our hackathon demo)</cite>
+        </blockquote>
+      </div>
+
+      <div class="hack-card reveal reveal-r d2 visible">
+        <div class="hack-header">
+          <div class="hack-icon">🏆</div>
+          <div>
+            <h3>SAATHI — Hackathon Build</h3>
+            <p>What we shipped in 24 hours</p>
+          </div>
+        </div>
+        <div class="hack-stats">
+          <div class="hstat">
+            <span class="hstat-val">24h</span>
+            <div class="hstat-label">Time to build<br>the full system</div>
+          </div>
+          <div class="hstat">
+            <span class="hstat-val">10+</span>
+            <div class="hstat-label">Indian languages<br>supported</div>
+          </div>
+          <div class="hstat">
+            <span class="hstat-val">₹0</span>
+            <div class="hstat-label">Cost per call<br>(no VoIP needed)</div>
+          </div>
+          <div class="hstat">
+            <span class="hstat-val">1-click</span>
+            <div class="hstat-label">Setup on any<br>Windows laptop</div>
+          </div>
+        </div>
+        <div class="hack-features">
+          <div class="hf-row"><span class="hf-dot"></span>Fully automated voice calls — accept, respond, hang up</div>
+          <div class="hf-row"><span class="hf-dot"></span>WhatsApp integration — send summaries and PDFs</div>
+          <div class="hf-row"><span class="hf-dot"></span>Intent detection: agriculture, healthcare, government</div>
+          <div class="hf-row"><span class="hf-dot"></span>Live data: weather, market prices, schemes</div>
+          <div class="hf-row"><span class="hf-dot"></span>Soil photo analysis → AI report → PDF on WhatsApp</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ §3 PROBLEM ══ -->
+<section id="problem">
+  <div class="bg-grid"></div>
+  <div class="ca ca-br"></div>
+  <div class="ghost-num">03</div>
+  <div class="wrap">
+    <div class="prob-header reveal visible">
+      <div class="slide-tag">02 — The Problem We Can Solve For You</div>
+      <h2>A busy clinic <em>shouldn't lose patients</em><br>to a busy phone line.</h2>
+      <p>High-volume dental practices face a predictable set of operational problems. Every missed call, every no-show, every manual task is costing time and revenue — and none of it requires a human to solve.</p>
+    </div>
+    <div class="prob-grid">
+      <div class="pcard reveal d1 visible">
+        <span class="pcard-icon">📞</span>
+        <h3>Call Volume Overload</h3>
+        <p>A 10-chair clinic gets dozens of calls daily. One receptionist can't handle simultaneous bookings, FAQs, and reminders without dropping calls.</p>
+        <span class="pcard-pill">Missed appointments ↑</span>
+      </div>
+      <div class="pcard reveal d2 visible">
+        <span class="pcard-icon">🗓️</span>
+        <h3>No Automated Reminders</h3>
+        <p>Without a reminder system, no-shows pile up — empty chairs, disrupted schedules. Manual calling is time-consuming and inconsistent.</p>
+        <span class="pcard-pill">Revenue leakage ↑</span>
+      </div>
+      <div class="pcard reveal d3 visible">
+        <span class="pcard-icon">📋</span>
+        <h3>Manual Prescription Writing</h3>
+        <p>After each consultation, manually writing or dictating notes adds 5–10 minutes per patient. Over a full day, that's significant lost time for the doctor.</p>
+        <span class="pcard-pill">Doctor's time wasted</span>
+      </div>
+      <div class="pcard reveal d2 visible">
+        <span class="pcard-icon">🏥</span>
+        <h3>No Post-Treatment Follow-Up</h3>
+        <p>After extractions, RCT, or surgeries, patients rarely get follow-up calls. Complications go unreported. Patient satisfaction and safety both suffer.</p>
+        <span class="pcard-pill">Retention risk ↑</span>
+      </div>
+      <div class="pcard reveal d3 visible">
+        <span class="pcard-icon">🗃️</span>
+        <h3>Fragmented Patient Records</h3>
+        <p>When a returning patient calls, staff must manually search for their history. Every call starts cold, making it harder to deliver personalised care.</p>
+        <span class="pcard-pill">Impersonal experience</span>
+      </div>
+      <div class="pcard reveal d4 visible">
+        <span class="pcard-icon">💸</span>
+        <h3>Expensive AI Calling Options</h3>
+        <p>IVR systems and cloud call bots charge ₹1–3 per minute and require complex setup. The cost-benefit rarely makes sense for a single-clinic operation.</p>
+        <span class="pcard-pill">Not cost-effective</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ §4 INNOVATION ══ -->
+<section id="innovation">
+  <div class="glow-r"></div>
+  <div class="ca ca-tl"></div>
+  <div class="ghost-num">04</div>
+  <div class="wrap">
+    <div class="inno-grid">
+      <div class="reveal reveal-l visible">
+        <div class="slide-tag">03 — Our Core Innovation</div>
+        <h2>We eliminated<br>the carrier.<br><em>Zero cost per call.</em></h2>
+        <p>Every other AI calling solution needs a Twilio or Exotel VoIP number — that's ₹1–3 per minute, SIM registration, and cloud infrastructure you have to maintain indefinitely.</p>
+        <p>We found a better way. Using <strong style="color:var(--white)">Microsoft Phone Link</strong> — already built into Windows — your clinic's existing mobile phone pairs with a laptop via Bluetooth. When a patient calls your regular number, SAATHI intercepts the call on the laptop and handles the entire conversation. The patient never knows anything changed. They just hear a warm, intelligent AI voice.</p>
+        <p style="color:var(--gold-light);font-style:italic;font-family:'Cormorant Garamond',serif;font-size:1rem;">No new phone number. No new SIM. No per-minute charges. Just plug in and it works.</p>
+        <table class="inno-compare">
+          <thead><tr><th>Aspect</th><th>Other AI Bots</th><th>SAATHI</th></tr></thead>
+          <tbody>
+            <tr><td>Call cost</td><td class="bad">₹1–3 / minute</td><td class="good">₹0 (your SIM)</td></tr>
+            <tr><td>Setup requirement</td><td class="bad">Cloud + VoIP number</td><td class="good">Laptop + Bluetooth</td></tr>
+            <tr><td>Clinic phone number</td><td class="bad">Must change it</td><td class="good">Keep existing number</td></tr>
+            <tr><td>Call quality</td><td class="bad">VoIP (can degrade)</td><td class="good">Native mobile quality</td></tr>
+            <tr><td>Internet (patient side)</td><td class="bad">Required</td><td class="good">Not required</td></tr>
+            <tr><td>Time to deploy</td><td class="bad">Weeks + IT team</td><td class="good">Minutes, 1-click</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="reveal reveal-r d2 visible">
+        <div class="flow-box">
+          <div class="flow-box-title">How a patient call flows through SAATHI</div>
+          <div class="flow-steps">
+            <div class="fs">
+              <div class="fs-num">01</div>
+              <div class="fs-body"><h4>Patient dials your existing clinic number</h4><p>No new number, no app needed on their end</p></div>
+            </div>
+            <div class="fs">
+              <div class="fs-num">02</div>
+              <div class="fs-body"><h4>Microsoft Phone Link mirrors call to laptop</h4><p>Bluetooth bridge — built into Windows, zero cost</p><span class="fs-chip">Carrier-Free Innovation</span></div>
+            </div>
+            <div class="fs">
+              <div class="fs-num">03</div>
+              <div class="fs-body"><h4>SAATHI auto-accepts via screen automation</h4><p>Detects the accept button and clicks it instantly — fully hands-free</p></div>
+            </div>
+            <div class="fs">
+              <div class="fs-num">04</div>
+              <div class="fs-body"><h4>Patient's voice transcribed in real time</h4><p>Sarvam AI — supports Kannada, Hindi, English and more</p></div>
+            </div>
+            <div class="fs">
+              <div class="fs-num">05</div>
+              <div class="fs-body"><h4>Groq LLaMA 3.3-70B generates a smart reply</h4><p>Sub-second response with clinic context baked in</p><span class="fs-chip">AI Core</span></div>
+            </div>
+            <div class="fs">
+              <div class="fs-num">06</div>
+              <div class="fs-body"><h4>SAATHI speaks the reply through the call</h4><p>Warm, natural Indian-accent voice (Sarvam TTS)</p></div>
+            </div>
+            <div class="fs">
+              <div class="fs-num">07</div>
+              <div class="fs-body"><h4>WhatsApp confirmation sent automatically</h4><p>Booking details, prescriptions, reminders — zero manual effort</p></div>
+            </div>
+            <div class="fs">
+              <div class="fs-num">08</div>
+              <div class="fs-body"><h4>Call ends gracefully when patient says goodbye</h4><p>AI detects farewell intent and auto-hangs up. Clean and professional.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOW SIMULATION -->
+    <div class="sim-section reveal d3 visible">
+      <div class="sim-title">Before SAATHI vs After SAATHI — Cost &amp; Complexity Simulation</div>
+      <div class="sim-compare">
+        <div class="sim-col sim-col-old">
+          <div class="sim-col-label">⚠ Existing Problem — Traditional AI Calling</div>
+          <div class="sim-step">
+            <div class="sim-step-icon">📞</div>
+            <div class="sim-step-body">
+              <h5>Patient calls clinic number</h5>
+              <p>Call enters a cloud VoIP gateway (Twilio/Exotel)</p>
+              <span class="sim-badge sim-badge-bad">₹1–3 per minute starts here</span>
+            </div>
+          </div>
+          <div class="sim-step">
+            <div class="sim-step-icon">🌐</div>
+            <div class="sim-step-body">
+              <h5>VoIP routing overhead</h5>
+              <p>Requires a dedicated cloud phone number, SIM registration, and IT-managed cloud infrastructure</p>
+              <span class="sim-badge sim-badge-bad">Complex setup · Weeks to deploy</span>
+            </div>
+          </div>
+          <div class="sim-step">
+            <div class="sim-step-icon">🤖</div>
+            <div class="sim-step-body">
+              <h5>Cloud bot processes call</h5>
+              <p>AI hosted on vendor servers — subscription locked, limited language support, no customisation</p>
+              <span class="sim-badge sim-badge-bad">₹15,000–40,000 / month</span>
+            </div>
+          </div>
+          <div class="sim-step">
+            <div class="sim-step-icon">💸</div>
+            <div class="sim-step-body">
+              <h5>Billing accumulates per call</h5>
+              <p>1,000 calls/month × avg 3 min × ₹2/min = ₹6,000+ in call costs alone, before any AI subscription</p>
+              <span class="sim-badge sim-badge-bad">Not viable for a single clinic</span>
+            </div>
+          </div>
+        </div>
+        <div class="sim-vs"><span>VS</span></div>
+        <div class="sim-col sim-col-new">
+          <div class="sim-col-label">✓ SAATHI Solution — Carrier-Free, Near-Zero Cost</div>
+          <div class="sim-step">
+            <div class="sim-step-icon">📞</div>
+            <div class="sim-step-body">
+              <h5>Patient calls your existing clinic number</h5>
+              <p>No new number, no SIM change — same number patients already know</p>
+              <span class="sim-badge sim-badge-good">Zero setup friction</span>
+            </div>
+          </div>
+          <div class="sim-step">
+            <div class="sim-step-icon">💻</div>
+            <div class="sim-step-body">
+              <h5>Microsoft Phone Link bridges call via Bluetooth</h5>
+              <p>Built into Windows. Your clinic's smartphone pairs with the laptop wirelessly — no carrier fee, no cloud routing</p>
+              <span class="sim-badge sim-badge-good">₹0 per call — our key innovation</span>
+            </div>
+          </div>
+          <div class="sim-step">
+            <div class="sim-step-icon">🤖</div>
+            <div class="sim-step-body">
+              <h5>SAATHI handles the full conversation locally</h5>
+              <p>Groq + Sarvam AI runs on the clinic's own laptop — fully customised for your clinic's workflow, Kannada/Hindi/English</p>
+              <span class="sim-badge sim-badge-good">Sub-second response · 10+ Indian languages</span>
+            </div>
+          </div>
+          <div class="sim-step">
+            <div class="sim-step-icon">✅</div>
+            <div class="sim-step-body">
+              <h5>Total call infrastructure cost</h5>
+              <p>1,000 calls/month × ₹0 call cost + ₹800–2,500 AI API = total SAATHI cost vs ₹21,000–58,000 traditional</p>
+              <span class="sim-badge sim-badge-good">~95% cost reduction</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ §5 FEATURES ══ -->
+<section id="features">
+  <div class="bg-grid"></div>
+  <div class="ca ca-br"></div>
+  <div class="ghost-num">05</div>
+  <div class="wrap">
+    <div class="feat-header reveal visible">
+      <div class="slide-tag">04 — What We've Built for Your Clinic</div>
+      <h2>Everything your clinic needs,<br><em>without the overhead.</em></h2>
+    </div>
+    <div class="tabs reveal d1 visible">
+      <button class="tab active" onclick="switchTab(event,'dental')">🦷 Dental Clinic</button>
+      <button class="tab" onclick="switchTab(event,'voice')">📞 Voice System</button>
+      <button class="tab" onclick="switchTab(event,'whatsapp')">💬 WhatsApp</button>
+    </div>
+
+    <!-- Panel 1: Dental Clinic -->
+    <div class="panel active" id="panel-dental">
+      <div class="fcard">
+        <div class="fcard-top"><div class="fcard-icon" style="background:rgba(74,222,128,.12)">📅</div><h3>Appointment Booking</h3></div>
+        <p>Patients call, speak naturally — "I want a cleaning next Tuesday" — and SAATHI books the slot, confirms verbally, and sends a WhatsApp confirmation. Zero receptionist effort.</p>
+        <span class="fcard-tag tag-live">✓ Built &amp; Working</span>
+      </div>
+      <div class="fcard">
+        <div class="fcard-top"><div class="fcard-icon" style="background:rgba(96,165,250,.12)">🔔</div><h3>Automated Reminders</h3></div>
+        <p>SAATHI places outbound reminder calls 24 hours before each appointment — patient's name, time, and doctor — in their preferred language. No-shows drop significantly.</p>
+        <span class="fcard-tag tag-deploy">Ready to Deploy</span>
+      </div>
+      <div class="fcard">
+        <div class="fcard-top"><div class="fcard-icon" style="background:rgba(251,113,133,.12)">💊</div><h3>AI Prescription Notes</h3></div>
+        <p>SAATHI listens during the consultation and auto-generates a structured note: diagnosis, procedure, medications, dosage, follow-up date. Doctor reviews and approves in seconds.</p>
+        <span class="fcard-tag tag-deploy">Ready to Deploy</span>
+      </div>
+      <div class="fcard">
+        <div class="fcard-top"><div class="fcard-icon" style="background:rgba(45,212,191,.12)">🤖</div><h3>AI Reception — FAQ Bot</h3></div>
+        <p>Handles high-volume inbound calls: clinic timings, location, services, fees. Frees up your receptionist for tasks that genuinely need a human.</p>
+        <span class="fcard-tag tag-live">✓ Built &amp; Working</span>
+      </div>
+      <div class="fcard">
+        <div class="fcard-top"><div class="fcard-icon" style="background:rgba(201,168,76,.15)">🚨</div><h3>Triage: Urgent vs Routine</h3></div>
+        <p>Pain + fever + swelling → flagged urgent, patient advised to come immediately. Routine checkup → normal booking flow. Smart routing, no extra configuration.</p>
+        <span class="fcard-tag tag-live">✓ Built &amp; Working</span>
+      </div>
+      <div class="fcard">
+        <div class="fcard-top"><div class="fcard-icon" style="background:rgba(167,139,250,.12)">📞</div><h3>Post-Treatment Follow-Up</h3></div>
+        <p>24–48 hours after a procedure, SAATHI calls the patient to check in. Responses are logged and flagged if symptoms are concerning. Patients feel genuinely cared for.</p>
+        <span class="fcard-tag tag-wip">Phase 2</span>
+      </div>
+    </div>
+
+    <!-- Panel 2: Voice System -->
+    <div class="panel" id="panel-voice">
+      <div class="fcard">
+        <div class="fcard-top"><div class="fcard-icon" style="background:rgba(201,168,76,.15)">🎙️</div><h3>Auto-Accept Calls</h3></div>
+        <p>pyautogui detects and clicks the accept button on Microsoft Phone Link. Fully hands-free — no one needs to monitor the laptop. The AI handles everything.</p>
+        <span class="fcard-tag tag-live">✓ Built &amp; Working</span>
+      </div>
+      <div class="fcard">
+        <div class="fcard-top"><div class="fcard-icon" style="background:rgba(45,212,191,.12)">🌐</div><h3>Multilingual AI</h3></div>
+        <p>Detects the language the patient speaks — Kannada, Hindi, English, Tamil — and responds in that language with the correct Indian-accent voice. No setup required.</p>
+        <span class="fcard-tag tag-live">✓ Built &amp; Working</span>
+      </div>
+      <div class="fcard">
+        <div class="fcard-top"><div class="fcard-icon" style="background:rgba(96,165,250,.12)">⚡</div><h3>Sub-Second Response</h3></div>
+        <p>Groq's inference infrastructure runs LLaMA 3.3-70B at speeds fast enough for natural voice conversation. No awkward pauses. Fluid, human-feeling dialogue.</p>
+        <span class="fcard-tag tag-live">✓ Built &amp; Working</span>
+      </div>
+      <div class="fcard">
+        <div class="fcard-top"><div class="fcard-icon" style="background:rgba(167,139,250,.12)">🧠</div><h3>Session Memory</h3></div>
+        <p>SAATHI remembers the full context of the current call. If a patient mentions a symptom early, it references it naturally later. Conversations feel coherent and intelligent.</p>
+        <span class="fcard-tag tag-live">✓ Built &amp; Working</span>
+      </div>
+      <div class="fcard">
+        <div class="fcard-top"><div class="fcard-icon" style="background:rgba(251,113,133,.12)">🎙️</div><h3>Intelligent VAD</h3></div>
+        <p>Uses Silero VAD to detect when the patient starts and stops speaking. Bypasses background noise and ambient murmurs so the AI only speaks when it should.</p>
+        <span class="fcard-tag tag-live">✓ Built &amp; Working</span>
+      </div>
+      <div class="fcard">
+        <div class="fcard-top"><div class="fcard-icon" style="background:rgba(74,222,128,.12)">🔈</div><h3>Direct Audio Routing</h3></div>
+        <p>Automatically routes speaker and microphone lines into Microsoft Phone Link via Virtual Audio Cable (CABLE) and Voicemeeter, ensuring flawless digital line-in audio.</p>
+        <span class="fcard-tag tag-live">✓ Built &amp; Working</span>
+      </div>
+    </div>
+
+    <!-- Panel 3: WhatsApp -->
+    <div class="panel" id="panel-whatsapp">
+      <div class="fcard">
+        <div class="fcard-top"><div class="fcard-icon" style="background:rgba(74,222,128,.12)">💬</div><h3>Instant Confirmation</h3></div>
+        <p>Sends booking details (date, time, dentist, location link) instantly over WhatsApp as soon as the patient hangs up. Zero manual effort from the receptionist.</p>
+        <span class="fcard-tag tag-live">✓ Built &amp; Working</span>
+      </div>
+      <div class="fcard">
+        <div class="fcard-top"><div class="fcard-icon" style="background:rgba(45,212,191,.12)">📄</div><h3>PDF Prescription Dispatch</h3></div>
+        <p>Transcribes doctor's consultation instructions, generates a professional prescription PDF, and texts it directly to the patient's WhatsApp window.</p>
+        <span class="fcard-tag tag-deploy">Ready to Deploy</span>
+      </div>
+      <div class="fcard">
+        <div class="fcard-top"><div class="fcard-icon" style="background:rgba(201,168,76,.15)">🔔</div><h3>Post-Care Instructions</h3></div>
+        <p>Automatically pushes tailored post-op instructions (e.g., dietary advice after extraction, care after RCT) to the patient’s chat for quick reference.</p>
+        <span class="fcard-tag tag-deploy">Ready to Deploy</span>
+      </div>
+      <div class="fcard">
+        <div class="fcard-top"><div class="fcard-icon" style="background:rgba(167,139,250,.12)">🤖</div><h3>Interactive Inquiry Replies</h3></div>
+        <p>If patients text back asking for directions, clinic hours, or accepted payment modes, the AI automatically replies in natural text, keeping engagement high.</p>
+        <span class="fcard-tag tag-wip">Phase 2</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ §6 ARCHITECTURE ══ -->
+<section id="arch">
+  <div class="bg-grid"></div>
+  <div class="ca ca-tl"></div>
+  <div class="ghost-num">06</div>
+  <div class="wrap">
+    <div class="arch-header reveal">
+      <div class="slide-tag">05 — System Architecture</div>
+      <h2>Engineered for <em>Reliability</em> and <em>Speed</em></h2>
+    </div>
+    <div class="arch-diagram reveal d2">
+      <!-- Tier 1: The Core Live Loop -->
+      <div class="arch-tier1">
+        <div class="anode teal">
+          <span class="anode-icon">📞</span>
+          <h4>Patient Call</h4>
+          <p>Native Carrier Network</p>
+        </div>
+        <div class="arch-arr">
+          <span>Bluetooth</span>
+          <span>⟶</span>
+        </div>
+        <div class="anode gold">
+          <span class="anode-icon">💻</span>
+          <h4>Phone Link</h4>
+          <p>Windows Gateway</p>
+        </div>
+        <div class="arch-arr">
+          <span>pyautogui</span>
+          <span>⟶</span>
+        </div>
+        <div class="anode">
+          <span class="anode-icon">⚙️</span>
+          <h4>SAATHI Backend</h4>
+          <p>Rust/Tauri Control Core</p>
+        </div>
+        <div class="arch-arr">
+          <span>Groq/Sarvam</span>
+          <span>⟶</span>
+        </div>
+        <div class="anode gold">
+          <span class="anode-icon">🔊</span>
+          <h4>Audio Routing</h4>
+          <p>Voicemeeter Loopback</p>
+        </div>
+      </div>
+
+      <div class="arch-divider">
+        <span>Integrated Core Components</span>
+      </div>
+
+      <!-- Tier 2: Mini Modules -->
+      <div class="arch-tier2">
+        <div class="amini">
+          <span class="amini-icon">🎙️</span>
+          <h5>Sarvam STT</h5>
+          <p>Indic Speech-to-Text</p>
+        </div>
+        <div class="amini">
+          <span class="amini-icon">🧠</span>
+          <h5>LLaMA 3.3</h5>
+          <p>70B Intent Processor</p>
+        </div>
+        <div class="amini">
+          <span class="amini-icon">🗣️</span>
+          <h5>Sarvam TTS</h5>
+          <p>Natural Voice Synthesis</p>
+        </div>
+        <div class="amini">
+          <span class="amini-icon">🗄️</span>
+          <h5>SQLite Ledger</h5>
+          <p>Transcripts &amp; Archives</p>
+        </div>
+        <div class="amini">
+          <span class="amini-icon">💬</span>
+          <h5>WhatsApp Bot</h5>
+          <p>Instant Dispatch Engine</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ §7 METRICS ══ -->
+<section id="metrics">
+  <div class="glow-l"></div>
+  <div class="ca ca-br"></div>
+  <div class="ghost-num">07</div>
+  <div class="wrap">
+    <div class="met-header reveal">
+      <div class="slide-tag">06 — Real Business Impact</div>
+      <h2>High performance, <em>fraction of the cost</em>.</h2>
+    </div>
+    
+    <!-- Big Stats -->
+    <div class="big-stats reveal d1">
+      <div class="bstat">
+        <span class="bstat-val">98.4%</span>
+        <div class="bstat-label">Inbound Calls Answered Automatically</div>
+        <div class="bstat-note">Zero dropped opportunities</div>
+      </div>
+      <div class="bstat">
+        <span class="bstat-val">&lt; 850ms</span>
+        <div class="bstat-label">Conversational Latency Speed</div>
+        <div class="bstat-note">Fluid turn-taking responses</div>
+      </div>
+      <div class="bstat">
+        <span class="bstat-val">1.5 hrs</span>
+        <div class="bstat-label">Receptionist Time Saved Daily</div>
+        <div class="bstat-note">Re-allocated to patient care</div>
+      </div>
+      <div class="bstat">
+        <span class="bstat-val">95%</span>
+        <div class="bstat-label">Reduction in Call Setup Cost</div>
+        <div class="bstat-note">Compared to VoIP bots</div>
+      </div>
+    </div>
+
+    <!-- Chart Duo -->
+    <div class="chart-duo reveal d2">
+      <!-- Chart Card 1: Cost Per Call (Bar Chart) -->
+      <div class="chart-card">
+        <h4>Setup &amp; Carrier Cost Per Call Minute</h4>
+        
+        <div class="bar-r">
+          <span class="bar-lbl">Traditional Cloud AI</span>
+          <div class="bar-track"><div class="bar-fill" style="background:var(--rose); width: 85%"></div></div>
+          <span class="bar-val">₹3.00</span>
+        </div>
+        <div class="bar-r">
+          <span class="bar-lbl">Typical Smart Bot</span>
+          <div class="bar-track"><div class="bar-fill" style="background:var(--gold); width: 55%"></div></div>
+          <span class="bar-val">₹1.80</span>
+        </div>
+        <div class="bar-r">
+          <span class="bar-lbl">SAATHI (Phone Link)</span>
+          <div class="bar-track"><div class="bar-fill" style="background:var(--teal); width: 5%"></div></div>
+          <span class="bar-val">₹0.00</span>
+        </div>
+      </div>
+
+      <!-- Chart Card 2: Cost Breakdown -->
+      <div class="chart-card">
+        <h4>Monthly Infrastructure Cost Analysis</h4>
+        <div class="cost-list">
+          <div class="cost-row">
+            <span class="cost-name">VoIP Telephony Subscription (Twilio/Exotel)</span>
+            <span class="cost-chip cost-high">₹6,000+</span>
+          </div>
+          <div class="cost-row">
+            <span class="cost-name">AI Platform Licensing &amp; Hosting Fees</span>
+            <span class="cost-chip cost-high">₹15,000+</span>
+          </div>
+          <div class="cost-row">
+            <span class="cost-name">SAATHI Bluetooth Audio Routing Gateway</span>
+            <span class="cost-chip cost-zero">₹0 (Free)</span>
+          </div>
+          <div class="cost-row">
+            <span class="cost-name">Serverless Groq/Sarvam API Calls (Pay-As-You-Use)</span>
+            <span class="cost-chip cost-low">₹800–2,500</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ §8 ROADMAP ══ -->
+<section id="roadmap">
+  <div class="bg-grid"></div>
+  <div class="ca ca-tl"></div>
+  <div class="ghost-num">08</div>
+  <div class="wrap">
+    <div class="rm-header reveal">
+      <div class="slide-tag">07 — Product Development Roadmap</div>
+      <h2>Continuous <em>Evolution</em> &amp; robust <em>Stack</em></h2>
+      <p>Here is how we plan to deploy SAATHI in your clinic over three rapid phases, backed by modern, open-source technology.</p>
+    </div>
+    
+    <!-- Phases -->
+    <div class="phases reveal d1">
+      <div class="phase ph1">
+        <div class="phase-badge">Phase 1</div>
+        <h3>Inbound Automation</h3>
+        <div class="phase-dur">Week 1–2</div>
+        <ul class="phase-list">
+          <li>Deploy Bluetooth gateway to regular clinic phone line.</li>
+          <li>Configure custom FAQ replies &amp; dentist schedule database.</li>
+          <li>Activate auto-accept screen trigger for immediate handling.</li>
+        </ul>
+      </div>
+      <div class="phase ph2">
+        <div class="phase-badge">Phase 2</div>
+        <h3>WhatsApp &amp; Integrations</h3>
+        <div class="phase-dur">Week 3–4</div>
+        <ul class="phase-list">
+          <li>Automate instant booking cards sent directly to patients.</li>
+          <li>Deploy prescription note generators on doctor’s tablet.</li>
+          <li>Configure post-op checkup outreach sequences.</li>
+        </ul>
+      </div>
+      <div class="phase ph3">
+        <div class="phase-badge">Phase 3</div>
+        <h3>Scale &amp; Security</h3>
+        <div class="phase-dur">Week 5+</div>
+        <ul class="phase-list">
+          <li>Deploy on-device LLMs for complete offline privacy.</li>
+          <li>Expand to support a multi-chair shared front-desk.</li>
+          <li>Continuous system updates &amp; dashboard visual analytics.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Tech Stack Row -->
+    <div class="stack-row reveal d2">
+      <div class="st-pill">
+        <span class="st-icon">🦀</span>
+        <div class="st-name">Rust / Tauri</div>
+        <div class="st-desc">Desktop backend controller</div>
+      </div>
+      <div class="st-pill">
+        <span class="st-icon">⚛️</span>
+        <div class="st-name">React / TS</div>
+        <div class="st-desc">Sleek frontend dashboard</div>
+      </div>
+      <div class="st-pill">
+        <span class="st-icon">🐍</span>
+        <div class="st-name">Python</div>
+        <div class="st-desc">Screen Automation &amp; OS Logic</div>
+      </div>
+      <div class="st-pill">
+        <span class="st-icon">⚡</span>
+        <div class="st-name">Groq API</div>
+        <div class="st-desc">Sub-second LLM inference</div>
+      </div>
+      <div class="st-pill">
+        <span class="st-icon">🗣️</span>
+        <div class="st-name">Sarvam AI</div>
+        <div class="st-desc">Accurate Indic TTS/STT</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ §9 CTA ══ -->
+<section id="cta">
+  <div class="glow-r"></div>
+  <div class="ca ca-br"></div>
+  <div class="ghost-num">09</div>
+  <div class="wrap">
+    <div class="cta-wrap reveal">
+      <div class="cta-eyebrow">Deploy SAATHI in Your Clinic</div>
+      <h2 class="cta-title">Ready to <em>elevate</em> your<br>patient experience?</h2>
+      <p class="cta-body">Let's schedule a 15-minute live demonstration at your office. We will bring our laptop, connect your phone, and show you SAATHI answering calls live in front of you. No setup fees, no risks.</p>
+      
+      <!-- CTA Offers -->
+      <div class="cta-offers">
+        <div class="offer-card">
+          <h4>Custom Voice</h4>
+          <p>Cloned in your accent</p>
+        </div>
+        <div class="offer-card">
+          <h4>100% Free Demo</h4>
+          <p>Live in your office</p>
+        </div>
+        <div class="offer-card">
+          <h4>95% Savings</h4>
+          <p>Compared to cloud bots</p>
+        </div>
+      </div>
+
+      <a class="cta-btn" href="mailto:team@saathi.ai?subject=SAATHI%20Clinic%20Demo%20Request">
+        <span>Request In-Office Live Demo</span>
+        <span>→</span>
+      </a>
+      <p class="cta-note">Built with care by students of SJB Institute of Technology, Bengaluru</p>
+      
+      <div class="cta-line"></div>
+
+      <!-- Team Members Grid -->
+      <div class="sim-title">Meet Our Engineering Team</div>
+      <div class="team-grid-full">
+        <div class="team-card-full">
+          <div class="tc-avatar">👨‍💻</div>
+          <div class="tc-name">Nandan R</div>
+          <div class="tc-contact">
+            <span class="tc-link">SJBIT Computer Science</span>
+            <span class="tc-link">Full-Stack &amp; Desktop Core</span>
+          </div>
+        </div>
+        <div class="team-card-full">
+          <div class="tc-avatar">🧠</div>
+          <div class="tc-name">Pratham S</div>
+          <div class="tc-contact">
+            <span class="tc-link">SJBIT Information Science</span>
+            <span class="tc-link">LLM Logic &amp; Indic Integration</span>
+          </div>
+        </div>
+        <div class="team-card-full">
+          <div class="tc-avatar">🤖</div>
+          <div class="tc-name">Likith Gowda</div>
+          <div class="tc-contact">
+            <span class="tc-link">SJBIT Computer Science</span>
+            <span class="tc-link">Tauri, OS &amp; Audio Routing</span>
+          </div>
+        </div>
+        <div class="team-card-full">
+          <div class="tc-avatar">⚙️</div>
+          <div class="tc-name">Hemanth J</div>
+          <div class="tc-contact">
+            <span class="tc-link">SJBIT Computer Science</span>
+            <span class="tc-link">Automation &amp; WhatsApp Core</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 SAATHI Voice Systems. Built with passion at <em class="fl">SJB Institute of Technology</em>, Bengaluru.</p>
+  <p class="nav-tag">🥈 Hackathon Runner-up Build</p>
+</footer>
+
+<script>
+// Interactive Tab Switching for Features Panel
+function switchTab(event, tabId) {
+  // Deactivate all tabs
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  // Deactivate all panels
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  
+  // Activate selected tab
+  event.currentTarget.classList.add('active');
+  // Activate selected panel
+  document.getElementById('panel-' + tabId).classList.add('active');
+}
+
+// Scroll Progress Indicator
+window.addEventListener('scroll', () => {
+  const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+  const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const scrolled = (winScroll / height) * 100;
+  document.getElementById('progress').style.width = scrolled + '%';
+});
+
+// Navigation Pill Activation
+window.addEventListener('scroll', () => {
+  const scrollPos = window.scrollY || document.documentElement.scrollTop;
+  const sections = ['who', 'problem', 'innovation', 'features', 'metrics', 'roadmap', 'cta'];
+  let currentActive = 'innovation'; // Default active if none match
+
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      const top = el.offsetTop - 120;
+      const bottom = top + el.offsetHeight;
+      if (scrollPos >= top && scrollPos < bottom) {
+        currentActive = id;
+      }
+    }
+  });
+
+  document.querySelectorAll('.npill').forEach(pill => {
+    pill.classList.remove('active');
+    const href = pill.getAttribute('href');
+    if (href === '#' + currentActive) {
+      pill.classList.add('active');
+    }
+  });
+});
+
+// Scroll Reveal Animations using Intersection Observer
+document.addEventListener('DOMContentLoaded', () => {
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.15
+  };
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        
+        // If it's the chart-duo, trigger bar fill animations
+        if (entry.target.classList.contains('chart-duo')) {
+          document.querySelectorAll('.bar-fill').forEach(bar => {
+            const width = bar.style.width;
+            bar.style.width = '0';
+            setTimeout(() => {
+              bar.style.width = width;
+            }, 100);
+          });
+        }
+      }
+    });
+  }, observerOptions);
+  
+  document.querySelectorAll('.reveal, .reveal-l, .reveal-r').forEach(el => {
+    observer.observe(el);
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,298 @@
+
+> void-relay@1.0.0 tauri
+> tauri dev
+
+     Running BeforeDevCommand (`npm run dev`)
+
+> void-relay@1.0.0 dev
+> vite
+
+
+  VITE v5.4.21  ready in 176 ms
+
+  ➜  Local:   http://localhost:1420/
+  ➜  Network: use --host to expose
+     Running DevCommand (`cargo  run --no-default-features --color always --`)
+        Info Watching /Users/falcon/Downloads/claude/saathi/void-relay/src-tauri for changes...
+[1m[92m   Compiling[0m void-relay v1.0.0 (/Users/falcon/Downloads/claude/saathi/void-relay/src-tauri)
+[1m[96m    Building[0m [=======================> ] 573/576: void-relay(build)           [1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: unused import: `bytes::Bytes`[0m
+ [1m[94m--> [0msrc/ai/llm/groq_client.rs:7:5
+  [1m[94m|[0m
+[1m[94m7[0m [1m[94m|[0m use bytes::Bytes;
+  [1m[94m|[0m     [1m[33m^^^^^^^^^^^^[0m
+  [1m[94m|[0m
+  [1m[94m= [0m[1mnote[0m: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: unused import: `tokio::sync::mpsc`[0m
+ [1m[94m--> [0msrc/ai/llm/llm_router.rs:4:5
+  [1m[94m|[0m
+[1m[94m4[0m [1m[94m|[0m use tokio::sync::mpsc;
+  [1m[94m|[0m     [1m[33m^^^^^^^^^^^^^^^^^[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: unused imports: `Engine as _` and `engine::general_purpose::STANDARD`[0m
+ [1m[94m--> [0msrc/ai/stt/sarvam_stt.rs:4:14
+  [1m[94m|[0m
+[1m[94m4[0m [1m[94m|[0m use base64::{Engine as _, engine::general_purpose::STANDARD};
+  [1m[94m|[0m              [1m[33m^^^^^^^^^^^[0m  [1m[33m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: unused import: `HostTrait`[0m
+ [1m[94m--> [0msrc/audio/capture.rs:3:33
+  [1m[94m|[0m
+[1m[94m3[0m [1m[94m|[0m use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
+  [1m[94m|[0m                                 [1m[33m^^^^^^^^^[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: unused import: `cpal::traits::HostTrait`[0m
+ [1m[94m--> [0msrc/audio/pipeline.rs:4:5
+  [1m[94m|[0m
+[1m[94m4[0m [1m[94m|[0m use cpal::traits::HostTrait;
+  [1m[94m|[0m     [1m[33m^^^^^^^^^^^^^^^^^^^^^^^[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: unused import: `HostTrait`[0m
+ [1m[94m--> [0msrc/audio/playback.rs:1:33
+  [1m[94m|[0m
+[1m[94m1[0m [1m[94m|[0m use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
+  [1m[94m|[0m                                 [1m[33m^^^^^^^^^[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: unused import: `std::sync::Arc`[0m
+ [1m[94m--> [0msrc/bluetooth/audio_bridge.rs:1:5
+  [1m[94m|[0m
+[1m[94m1[0m [1m[94m|[0m use std::sync::Arc;
+  [1m[94m|[0m     [1m[33m^^^^^^^^^^^^^^[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: unused import: `DeviceTrait`[0m
+  [1m[94m--> [0msrc/bluetooth/platform/windows.rs:43:28
+   [1m[94m|[0m
+[1m[94m43[0m [1m[94m|[0m         use cpal::traits::{DeviceTrait, HostTrait};
+   [1m[94m|[0m                            [1m[33m^^^^^^^^^^^[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: unused import: `Manager`[0m
+  [1m[94m--> [0msrc/bridge/ws_server.rs:11:13
+   [1m[94m|[0m
+[1m[94m11[0m [1m[94m|[0m use tauri::{Manager, Emitter};
+   [1m[94m|[0m             [1m[33m^^^^^^^[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: unused import: `Deserialize`[0m
+ [1m[94m--> [0msrc/call/orchestrator.rs:5:13
+  [1m[94m|[0m
+[1m[94m5[0m [1m[94m|[0m use serde::{Deserialize, Serialize};
+  [1m[94m|[0m             [1m[33m^^^^^^^^^^^[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: unused import: `Manager`[0m
+ [1m[94m--> [0msrc/models/downloader.rs:5:24
+  [1m[94m|[0m
+[1m[94m5[0m [1m[94m|[0m use tauri::{AppHandle, Manager, Emitter};
+  [1m[94m|[0m                        [1m[33m^^^^^^^[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: unused import: `tokio::sync::Mutex`[0m
+ [1m[94m--> [0msrc/models/downloader.rs:9:5
+  [1m[94m|[0m
+[1m[94m9[0m [1m[94m|[0m use tokio::sync::Mutex;
+  [1m[94m|[0m     [1m[33m^^^^^^^^^^^^^^^^^^[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: use of deprecated associated function `whisper_rs::WhisperContext::new`: Use `new_with_params` instead[0m
+  [1m[94m--> [0msrc/ai/stt/indic_whisper.rs:31:39
+   [1m[94m|[0m
+[1m[94m31[0m [1m[94m|[0m             let ctx = WhisperContext::new(&path_str).map_err(|e| anyhow::anyhow!("Whisper load error: {}", e))?;
+   [1m[94m|[0m                                       [1m[33m^^^[0m
+   [1m[94m|[0m
+   [1m[94m= [0m[1mnote[0m: `#[warn(deprecated)]` on by default
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: use of deprecated associated function `whisper_rs::WhisperContext::new`: Use `new_with_params` instead[0m
+  [1m[94m--> [0msrc/ai/stt/whisper_local.rs:34:39
+   [1m[94m|[0m
+[1m[94m34[0m [1m[94m|[0m             let ctx = WhisperContext::new(&path_str).map_err(|e| anyhow::anyhow!("Whisper load error: {}", e))?;
+   [1m[94m|[0m                                       [1m[33m^^^[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: variable does not need to be mutable[0m
+   [1m[94m--> [0msrc/call/orchestrator.rs:161:22
+    [1m[94m|[0m
+[1m[94m161[0m [1m[94m|[0m             let (tx, mut rx) = mpsc::channel::<Vec<i16>>(32);
+    [1m[94m|[0m                      [1m[94m----[0m[1m[33m^^[0m
+    [1m[94m|[0m                      [1m[94m|[0m
+    [1m[94m|[0m                      [1m[94mhelp: remove this `mut`[0m
+    [1m[94m|[0m
+    [1m[94m= [0m[1mnote[0m: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: unused variable: `rx`[0m
+   [1m[94m--> [0msrc/call/orchestrator.rs:161:22
+    [1m[94m|[0m
+[1m[94m161[0m [1m[94m|[0m             let (tx, mut rx) = mpsc::channel::<Vec<i16>>(32);
+    [1m[94m|[0m                      [1m[33m^^^^^^[0m [1m[33mhelp: if this is intentional, prefix it with an underscore: `_rx`[0m
+    [1m[94m|[0m
+    [1m[94m= [0m[1mnote[0m: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+[1m[33mwarning[0m[1m: unused variable: `orch`[0m
+   [1m[94m--> [0msrc/call/orchestrator.rs:177:21
+    [1m[94m|[0m
+[1m[94m177[0m [1m[94m|[0m                 let orch = self.clone(); // Need to Arc this in real implementation, simplified here
+    [1m[94m|[0m                     [1m[33m^^^^[0m [1m[33mhelp: if this is intentional, prefix it with an underscore: `_orch`[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: unused variable: `call_id`[0m
+   [1m[94m--> [0msrc/call/orchestrator.rs:201:43
+    [1m[94m|[0m
+[1m[94m201[0m [1m[94m|[0m     pub async fn handle_call_ended(&self, call_id: String) {
+    [1m[94m|[0m                                           [1m[33m^^^^^^^[0m [1m[33mhelp: if this is intentional, prefix it with an underscore: `_call_id`[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: unused variable: `state`[0m
+ [1m[94m--> [0msrc/commands/bluetooth_cmds.rs:6:29
+  [1m[94m|[0m
+[1m[94m6[0m [1m[94m|[0m pub async fn scan_bluetooth(state: State<'_, AppState>) -> Result<Vec<BluetoothDevice>, String> {
+  [1m[94m|[0m                             [1m[33m^^^^^[0m [1m[33mhelp: if this is intentional, prefix it with an underscore: `_state`[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: unused variable: `state`[0m
+  [1m[94m--> [0msrc/commands/bluetooth_cmds.rs:12:32
+   [1m[94m|[0m
+[1m[94m12[0m [1m[94m|[0m pub async fn connect_bluetooth(state: State<'_, AppState>, address: String) -> Result<(), String> {
+   [1m[94m|[0m                                [1m[33m^^^^^[0m [1m[33mhelp: if this is intentional, prefix it with an underscore: `_state`[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: unused variable: `address`[0m
+  [1m[94m--> [0msrc/commands/bluetooth_cmds.rs:12:60
+   [1m[94m|[0m
+[1m[94m12[0m [1m[94m|[0m pub async fn connect_bluetooth(state: State<'_, AppState>, address: String) -> Result<(), String> {
+   [1m[94m|[0m                                                            [1m[33m^^^^^^^[0m [1m[33mhelp: if this is intentional, prefix it with an underscore: `_address`[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: unused variable: `state`[0m
+  [1m[94m--> [0msrc/commands/bluetooth_cmds.rs:17:35
+   [1m[94m|[0m
+[1m[94m17[0m [1m[94m|[0m pub async fn disconnect_bluetooth(state: State<'_, AppState>) -> Result<(), String> {
+   [1m[94m|[0m                                   [1m[33m^^^^^[0m [1m[33mhelp: if this is intentional, prefix it with an underscore: `_state`[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: unused variable: `state`[0m
+  [1m[94m--> [0msrc/commands/bluetooth_cmds.rs:22:28
+   [1m[94m|[0m
+[1m[94m22[0m [1m[94m|[0m pub fn get_bluetooth_state(state: State<'_, AppState>) -> Result<bool, String> {
+   [1m[94m|[0m                            [1m[33m^^^^^[0m [1m[33mhelp: if this is intentional, prefix it with an underscore: `_state`[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: unused variable: `state`[0m
+  [1m[94m--> [0msrc/commands/model_cmds.rs:92:27
+   [1m[94m|[0m
+[1m[94m92[0m [1m[94m|[0m pub fn get_device_profile(state: State<'_, AppState>) -> crate::models::device_profiler::DeviceProfile {
+   [1m[94m|[0m                           [1m[33m^^^^^[0m [1m[33mhelp: if this is intentional, prefix it with an underscore: `_state`[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: unused variable: `app_handle`[0m
+  [1m[94m--> [0msrc/telegram/bot.rs:27:142
+   [1m[94m|[0m
+[1m[94m27[0m [1m[94m|[0m [1m[94m...[0mRwLock<AppSettings>>, app_handle: AppHandle) {
+   [1m[94m|[0m                          [1m[33m^^^^^^^^^^[0m [1m[33mhelp: if this is intentional, prefix it with an underscore: `_app_handle`[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: field `model_manager` is never read[0m
+  [1m[94m--> [0msrc/ai/language_detector.rs:24:5
+   [1m[94m|[0m
+[1m[94m23[0m [1m[94m|[0m pub struct LanguageDetector {
+   [1m[94m|[0m            [1m[94m----------------[0m [1m[94mfield in this struct[0m
+[1m[94m24[0m [1m[94m|[0m     model_manager: Arc<ModelManager>,
+   [1m[94m|[0m     [1m[33m^^^^^^^^^^^^^[0m
+   [1m[94m|[0m
+   [1m[94m= [0m[1mnote[0m: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: field `model_manager` is never read[0m
+  [1m[94m--> [0msrc/ai/stt/stt_router.rs:12:5
+   [1m[94m|[0m
+[1m[94m10[0m [1m[94m|[0m pub struct SttRouter {
+   [1m[94m|[0m            [1m[94m---------[0m [1m[94mfield in this struct[0m
+[1m[94m11[0m [1m[94m|[0m     settings: Arc<RwLock<AppSettings>>,
+[1m[94m12[0m [1m[94m|[0m     model_manager: Arc<ModelManager>,
+   [1m[94m|[0m     [1m[33m^^^^^^^^^^^^^[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: field `model_manager` is never read[0m
+  [1m[94m--> [0msrc/ai/tts/tts_router.rs:12:5
+   [1m[94m|[0m
+[1m[94m10[0m [1m[94m|[0m pub struct TtsRouter {
+   [1m[94m|[0m            [1m[94m---------[0m [1m[94mfield in this struct[0m
+[1m[94m11[0m [1m[94m|[0m     settings: Arc<RwLock<AppSettings>>,
+[1m[94m12[0m [1m[94m|[0m     model_manager: Arc<ModelManager>,
+   [1m[94m|[0m     [1m[33m^^^^^^^^^^^^^[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: field `models_dir` is never read[0m
+  [1m[94m--> [0msrc/models/downloader.rs:22:5
+   [1m[94m|[0m
+[1m[94m21[0m [1m[94m|[0m pub struct DownloadManager {
+   [1m[94m|[0m            [1m[94m---------------[0m [1m[94mfield in this struct[0m
+[1m[94m22[0m [1m[94m|[0m     models_dir: PathBuf,
+   [1m[94m|[0m     [1m[33m^^^^^^^^^^[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m[1m: call to `.clone()` on a reference in this situation does nothing[0m
+   [1m[94m--> [0msrc/call/orchestrator.rs:177:32
+    [1m[94m|[0m
+[1m[94m177[0m [1m[94m|[0m                 let orch = self.clone(); // Need to Arc this in real implementation, simplified here
+    [1m[94m|[0m                                [1m[33m^^^^^^^^[0m
+    [1m[94m|[0m
+    [1m[94m= [0m[1mnote[0m: the type `CallOrchestrator` does not implement `Clone`, so calling `clone` on `&CallOrchestrator` copies the reference, which does not do anything and can be removed
+    [1m[94m= [0m[1mnote[0m: `#[warn(noop_method_call)]` on by default
+[1m[96mhelp[0m: remove this redundant call
+    [1m[94m|[0m
+[1m[94m177[0m [91m- [0m                let orch = self[91m.clone()[0m; // Need to Arc this in real implementation, simplified here
+[1m[94m177[0m [92m+ [0m                let orch = self; // Need to Arc this in real implementation, simplified here
+    [1m[94m|[0m
+[1m[96mhelp[0m: if you meant to clone `CallOrchestrator`, implement `Clone` for it
+    [1m[94m|[0m
+[1m[94m 40[0m [92m+ #[derive(Clone)][0m
+[1m[94m 41[0m [1m[94m|[0m pub struct CallOrchestrator {
+    [1m[94m|[0m
+
+[1m[96m    Building[0m [=======================> ] 574/576: void-relay                  [K[1m[33mwarning[0m: `void-relay` (lib) generated 30 warnings (run `cargo fix --lib -p void-relay` to apply 24 suggestions)
+[1m[96m    Building[0m [=======================> ] 575/576: void-relay(bin)             [K[1m[92m    Finished[0m `dev` profile [unoptimized + debuginfo] target(s) in 8.03s
+[1m[92m     Running[0m `target/debug/void-relay`
+[2026-05-04T17:39:29Z INFO  void_relay] VoidRelay starting up...
+[2026-05-04T17:39:31Z INFO  void_relay] Starting WebSocket server on 0.0.0.0:7331
+[2026-05-04T17:39:31Z INFO  void_relay] Telegram bot not configured, skipping...
+
+thread 'main' (36097) panicked at /Users/falcon/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tauri-2.11.0/src/app.rs:2569:73:
+creating icon
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'main' (36097) panicked at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/core/src/panicking.rs:225:5:
+panic in a function that cannot unwind
+stack backtrace:
+   0:        0x1018d4078 - std[bb513d90a5cee88a]::backtrace_rs::backtrace::libunwind::trace
+                               at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/std/src/../../backtrace/src/backtrace/libunwind.rs:117:9
+   1:        0x1018d4078 - std[bb513d90a5cee88a]::backtrace_rs::backtrace::trace_unsynchronized::<std[bb513d90a5cee88a]::sys::backtrace::_print_fmt::{closure#1}>
+                               at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/std/src/../../backtrace/src/backtrace/mod.rs:66:14
+   2:        0x1018d4078 - std[bb513d90a5cee88a]::sys::backtrace::_print_fmt
+                               at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/std/src/sys/backtrace.rs:74:9
+   3:        0x1018d4078 - <<std[bb513d90a5cee88a]::sys::backtrace::BacktraceLock>::print::DisplayBacktrace as core[f63e075e1375d836]::fmt::Display>::fmt
+                               at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/std/src/sys/backtrace.rs:44:26
+   4:        0x1018ec054 - <core[f63e075e1375d836]::fmt::rt::Argument>::fmt
+                               at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/core/src/fmt/rt.rs:152:76
+   5:        0x1018ec054 - core[f63e075e1375d836]::fmt::write
+                               at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/core/src/fmt/mod.rs:1686:22
+   6:        0x1018db554 - std[bb513d90a5cee88a]::io::default_write_fmt::<std[bb513d90a5cee88a]::sys::stdio::unix::Stderr>
+                               at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/std/src/io/mod.rs:639:11
+   7:        0x1018db554 - <std[bb513d90a5cee88a]::sys::stdio::unix::Stderr as std[bb513d90a5cee88a]::io::Write>::write_fmt
+                               at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/std/src/io/mod.rs:1994:13
+   8:        0x1018b6e68 - <std[bb513d90a5cee88a]::sys::backtrace::BacktraceLock>::print
+                               at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/std/src/sys/backtrace.rs:47:25
+   9:        0x1018b6e68 - std[bb513d90a5cee88a]::panicking::default_hook::{closure#0}
+                               at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/std/src/panicking.rs:292:27
+  10:        0x1018cc028 - std[bb513d90a5cee88a]::panicking::default_hook
+                               at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/std/src/panicking.rs:319:9
+  11:        0x1018cc350 - std[bb513d90a5cee88a]::panicking::panic_with_hook
+                               at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/std/src/panicking.rs:825:13
+  12:        0x1018b6f40 - std[bb513d90a5cee88a]::panicking::panic_handler::{closure#0}
+                               at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/std/src/panicking.rs:691:13
+  13:        0x1018adf54 - std[bb513d90a5cee88a]::sys::backtrace::__rust_end_short_backtrace::<std[bb513d90a5cee88a]::panicking::panic_handler::{closure#0}, !>
+                               at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/std/src/sys/backtrace.rs:182:18
+  14:        0x1018b7984 - __rustc[b7974e8690430dd9]::rust_begin_unwind
+                               at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/std/src/panicking.rs:689:5
+  15:        0x10192362c - core[f63e075e1375d836]::panicking::panic_nounwind_fmt::runtime
+                               at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/core/src/panicking.rs:122:22
+  16:        0x10192362c - core[f63e075e1375d836]::panicking::panic_nounwind_fmt
+                               at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/core/src/intrinsics/mod.rs:2447:9
+  17:        0x1019235b4 - core[f63e075e1375d836]::panicking::panic_nounwind
+                               at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/core/src/panicking.rs:225:5
+  18:        0x101923708 - core[f63e075e1375d836]::panicking::panic_cannot_unwind
+                               at /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/core/src/panicking.rs:337:5
+  19:        0x10105f0e8 - tao::platform_impl::platform::app_delegate::did_finish_launching::h4ee78d326038a895
+                               at /Users/falcon/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tao-0.35.1/src/platform_impl/macos/app_delegate.rs:125:1
+  20:        0x19b07f494 - <unknown>
+  21:        0x19b0e3f44 - <unknown>
+  22:        0x19b0e3e88 - <unknown>
+  23:        0x19b05df94 - <unknown>
+  24:        0x19d2873a0 - <unknown>
+  25:        0x19f49fea0 - <unknown>
+  26:        0x19f49fc38 - <unknown>
+  27:        0x19fa16ed8 - <unknown>
+  28:        0x19fa1a6dc - <unknown>
+  29:        0x19d1d470c - <unknown>
+  30:        0x19c893688 - <unknown>
+thread caused non-unwinding panic. aborting.

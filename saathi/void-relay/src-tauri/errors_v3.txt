@@ -1,0 +1,251 @@
+   Compiling void-relay v1.0.0 (/Users/falcon/Downloads/claude/saathi/void-relay/src-tauri)
+error: proc macro panicked
+   --> src/lib.rs:180:14
+    |
+180 |         .run(tauri::generate_context!())
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: message: failed to read icon /Users/falcon/Downloads/claude/saathi/void-relay/src-tauri/icons/icon.png: unexpected end of file
+
+error[E0425]: cannot find value `engine` in this scope
+   --> src/call/orchestrator.rs:320:48
+    |
+320 | ...                   if let Ok(audio) = engine.tts_router.synthesize(tts_text, lang, online, mode).await {
+    |                                          ^^^^^^
+    |
+help: a local variable with a similar name exists
+    |
+320 -                             if let Ok(audio) = engine.tts_router.synthesize(tts_text, lang, online, mode).await {
+320 +                             if let Ok(audio) = online.tts_router.synthesize(tts_text, lang, online, mode).await {
+    |
+
+warning: unused import: `bytes::Bytes`
+ --> src/ai/llm/groq_client.rs:7:5
+  |
+7 | use bytes::Bytes;
+  |     ^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `tokio::sync::mpsc`
+ --> src/ai/llm/llm_router.rs:4:5
+  |
+4 | use tokio::sync::mpsc;
+  |     ^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `Engine as _` and `engine::general_purpose::STANDARD`
+ --> src/ai/stt/sarvam_stt.rs:4:14
+  |
+4 | use base64::{Engine as _, engine::general_purpose::STANDARD};
+  |              ^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `HostTrait`
+ --> src/audio/capture.rs:3:33
+  |
+3 | use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
+  |                                 ^^^^^^^^^
+
+warning: unused import: `cpal::traits::HostTrait`
+ --> src/audio/pipeline.rs:4:5
+  |
+4 | use cpal::traits::HostTrait;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `HostTrait`
+ --> src/audio/playback.rs:1:33
+  |
+1 | use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
+  |                                 ^^^^^^^^^
+
+warning: unused import: `std::sync::Arc`
+ --> src/bluetooth/audio_bridge.rs:1:5
+  |
+1 | use std::sync::Arc;
+  |     ^^^^^^^^^^^^^^
+
+warning: unused import: `DeviceTrait`
+  --> src/bluetooth/platform/windows.rs:43:28
+   |
+43 |         use cpal::traits::{DeviceTrait, HostTrait};
+   |                            ^^^^^^^^^^^
+
+warning: unused import: `Manager`
+  --> src/bridge/ws_server.rs:11:13
+   |
+11 | use tauri::{Manager, Emitter};
+   |             ^^^^^^^
+
+warning: unused import: `Deserialize`
+ --> src/call/orchestrator.rs:5:13
+  |
+5 | use serde::{Deserialize, Serialize};
+  |             ^^^^^^^^^^^
+
+warning: unused import: `Manager`
+ --> src/models/downloader.rs:5:24
+  |
+5 | use tauri::{AppHandle, Manager, Emitter};
+  |                        ^^^^^^^
+
+warning: unused import: `tokio::sync::Mutex`
+ --> src/models/downloader.rs:9:5
+  |
+9 | use tokio::sync::Mutex;
+  |     ^^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated associated function `whisper_rs::WhisperContext::new`: Use `new_with_params` instead
+  --> src/ai/stt/indic_whisper.rs:31:39
+   |
+31 |             let ctx = WhisperContext::new(&path_str).map_err(|e| anyhow::anyhow!("Whisper load error: {}", e))?;
+   |                                       ^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+
+warning: use of deprecated associated function `whisper_rs::WhisperContext::new`: Use `new_with_params` instead
+  --> src/ai/stt/whisper_local.rs:34:39
+   |
+34 |             let ctx = WhisperContext::new(&path_str).map_err(|e| anyhow::anyhow!("Whisper load error: {}", e))?;
+   |                                       ^^^
+
+warning: variable does not need to be mutable
+   --> src/call/orchestrator.rs:161:22
+    |
+161 |             let (tx, mut rx) = mpsc::channel::<Vec<i16>>(32);
+    |                      ----^^
+    |                      |
+    |                      help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+error[E0277]: the size for values of type `[i16]` cannot be known at compilation time
+   --> src/call/orchestrator.rs:320:39
+    |
+320 | ...                   if let Ok(audio) = engine.tts_router.synthesize(tts_text, lang, online, mode).await {
+    |                                 ^^^^^ doesn't have a size known at compile-time
+    |
+    = help: the trait `Sized` is not implemented for `[i16]`
+    = note: all local variables must have a statically known size
+
+error[E0277]: the size for values of type `[i16]` cannot be known at compilation time
+   --> src/call/orchestrator.rs:320:36
+    |
+320 | ...                   if let Ok(audio) = engine.tts_router.synthesize(tts_text, lang, online, mode).await {
+    |                              ^^^^^^^^^ doesn't have a size known at compile-time
+    |
+    = help: the trait `Sized` is not implemented for `[i16]`
+note: required by a bound in `std::prelude::v1::Ok`
+   --> /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/core/src/result.rs:561:4
+
+error[E0277]: the size for values of type `[i16]` cannot be known at compilation time
+   --> src/call/orchestrator.rs:320:107
+    |
+320 | ...                   if let Ok(audio) = engine.tts_router.synthesize(tts_text, lang, online, mode).await {
+    |                                                                                                     ^^^^^ doesn't have a size known at compile-time
+    |
+    = help: the trait `Sized` is not implemented for `[i16]`
+note: required by an implicit `Sized` bound in `Result`
+   --> /rustc/59807616e1fa2540724bfbac14d7976d7e4a3860/library/core/src/result.rs:557:0
+
+error: future cannot be sent between threads safely
+   --> src/commands/call_cmds.rs:38:1
+    |
+ 38 |   #[tauri::command]
+    |   ^^^^^^^^^^^^^^^^^ future returned by `say_text` is not `Send`
+    |
+   ::: src/lib.rs:148:25
+    |
+148 |           .invoke_handler(tauri::generate_handler![
+    |  _________________________-
+149 | |             commands::config_cmds::get_settings,
+150 | |             commands::config_cmds::save_settings,
+151 | |             commands::config_cmds::get_network_ips,
+...   |
+178 | |             commands::log_cmds::get_connected_phones,
+179 | |         ])
+    | |_________- in this macro invocation
+    |
+    = help: within `impl futures_util::Future<Output = Result<(), std::string::String>>`, the trait `std::marker::Send` is not implemented for `*mut ()`
+note: future is not `Send` as this value is used across an await
+   --> src/ai/tts/tts_router.rs:50:67
+    |
+ 48 |                     let s = self.settings.read();
+    |                         - has type `parking_lot::lock_api::RwLockReadGuard<'_, parking_lot::RawRwLock, AppSettings>` which is not `Send`
+ 49 |                     let model_id = &s.active_tts_english;
+ 50 |                     return self.piper.synthesize(&text, model_id).await;
+    |                                                                   ^^^^^ await occurs here, with `s` maybe used later
+note: required by a bound in `tauri::ipc::private::ResultFutureTag::future`
+   --> /Users/falcon/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tauri-2.11.0/src/ipc/command.rs:314:42
+    |
+310 |     pub async fn future<T, E, F>(self, value: F) -> Result<InvokeResponseBody, InvokeError>
+    |                  ------ required by a bound in this associated function
+...
+314 |       F: Future<Output = Result<T, E>> + Send,
+    |                                          ^^^^ required by this bound in `ResultFutureTag::future`
+    = note: this error originates in the macro `commands::call_cmds::__cmd__say_text` which comes from the expansion of the macro `tauri::generate_handler` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: unused variable: `rx`
+   --> src/call/orchestrator.rs:161:22
+    |
+161 |             let (tx, mut rx) = mpsc::channel::<Vec<i16>>(32);
+    |                      ^^^^^^ help: if this is intentional, prefix it with an underscore: `_rx`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `orch`
+   --> src/call/orchestrator.rs:177:21
+    |
+177 |                 let orch = self.clone(); // Need to Arc this in real implementation, simplified here
+    |                     ^^^^ help: if this is intentional, prefix it with an underscore: `_orch`
+
+warning: unused variable: `call_id`
+   --> src/call/orchestrator.rs:201:43
+    |
+201 |     pub async fn handle_call_ended(&self, call_id: String) {
+    |                                           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_call_id`
+
+warning: unused variable: `state`
+ --> src/commands/bluetooth_cmds.rs:6:29
+  |
+6 | pub async fn scan_bluetooth(state: State<'_, AppState>) -> Result<Vec<BluetoothDevice>, String> {
+  |                             ^^^^^ help: if this is intentional, prefix it with an underscore: `_state`
+
+warning: unused variable: `state`
+  --> src/commands/bluetooth_cmds.rs:12:32
+   |
+12 | pub async fn connect_bluetooth(state: State<'_, AppState>, address: String) -> Result<(), String> {
+   |                                ^^^^^ help: if this is intentional, prefix it with an underscore: `_state`
+
+warning: unused variable: `address`
+  --> src/commands/bluetooth_cmds.rs:12:60
+   |
+12 | pub async fn connect_bluetooth(state: State<'_, AppState>, address: String) -> Result<(), String> {
+   |                                                            ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_address`
+
+warning: unused variable: `state`
+  --> src/commands/bluetooth_cmds.rs:17:35
+   |
+17 | pub async fn disconnect_bluetooth(state: State<'_, AppState>) -> Result<(), String> {
+   |                                   ^^^^^ help: if this is intentional, prefix it with an underscore: `_state`
+
+warning: unused variable: `state`
+  --> src/commands/bluetooth_cmds.rs:22:28
+   |
+22 | pub fn get_bluetooth_state(state: State<'_, AppState>) -> Result<bool, String> {
+   |                            ^^^^^ help: if this is intentional, prefix it with an underscore: `_state`
+
+warning: unused variable: `state`
+  --> src/commands/model_cmds.rs:92:27
+   |
+92 | pub fn get_device_profile(state: State<'_, AppState>) -> crate::models::device_profiler::DeviceProfile {
+   |                           ^^^^^ help: if this is intentional, prefix it with an underscore: `_state`
+
+warning: unused variable: `app_handle`
+  --> src/telegram/bot.rs:27:142
+   |
+27 | ...RwLock<AppSettings>>, app_handle: AppHandle) {
+   |                          ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_app_handle`
+
+Some errors have detailed explanations: E0277, E0425.
+For more information about an error, try `rustc --explain E0277`.
+warning: `void-relay` (lib) generated 25 warnings
+error: could not compile `void-relay` (lib) due to 7 previous errors; 25 warnings emitted

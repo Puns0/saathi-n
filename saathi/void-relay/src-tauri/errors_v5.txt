@@ -1,0 +1,192 @@
+   Compiling void-relay v1.0.0 (/Users/falcon/Downloads/claude/saathi/void-relay/src-tauri)
+warning: unused import: `bytes::Bytes`
+ --> src/ai/llm/groq_client.rs:7:5
+  |
+7 | use bytes::Bytes;
+  |     ^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `tokio::sync::mpsc`
+ --> src/ai/llm/llm_router.rs:4:5
+  |
+4 | use tokio::sync::mpsc;
+  |     ^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `Engine as _` and `engine::general_purpose::STANDARD`
+ --> src/ai/stt/sarvam_stt.rs:4:14
+  |
+4 | use base64::{Engine as _, engine::general_purpose::STANDARD};
+  |              ^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `HostTrait`
+ --> src/audio/capture.rs:3:33
+  |
+3 | use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
+  |                                 ^^^^^^^^^
+
+warning: unused import: `cpal::traits::HostTrait`
+ --> src/audio/pipeline.rs:4:5
+  |
+4 | use cpal::traits::HostTrait;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `HostTrait`
+ --> src/audio/playback.rs:1:33
+  |
+1 | use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
+  |                                 ^^^^^^^^^
+
+warning: unused import: `std::sync::Arc`
+ --> src/bluetooth/audio_bridge.rs:1:5
+  |
+1 | use std::sync::Arc;
+  |     ^^^^^^^^^^^^^^
+
+warning: unused import: `DeviceTrait`
+  --> src/bluetooth/platform/windows.rs:43:28
+   |
+43 |         use cpal::traits::{DeviceTrait, HostTrait};
+   |                            ^^^^^^^^^^^
+
+warning: unused import: `Manager`
+  --> src/bridge/ws_server.rs:11:13
+   |
+11 | use tauri::{Manager, Emitter};
+   |             ^^^^^^^
+
+warning: unused import: `Deserialize`
+ --> src/call/orchestrator.rs:5:13
+  |
+5 | use serde::{Deserialize, Serialize};
+  |             ^^^^^^^^^^^
+
+warning: unused import: `Manager`
+ --> src/models/downloader.rs:5:24
+  |
+5 | use tauri::{AppHandle, Manager, Emitter};
+  |                        ^^^^^^^
+
+warning: unused import: `tokio::sync::Mutex`
+ --> src/models/downloader.rs:9:5
+  |
+9 | use tokio::sync::Mutex;
+  |     ^^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated associated function `whisper_rs::WhisperContext::new`: Use `new_with_params` instead
+  --> src/ai/stt/indic_whisper.rs:31:39
+   |
+31 |             let ctx = WhisperContext::new(&path_str).map_err(|e| anyhow::anyhow!("Whisper load error: {}", e))?;
+   |                                       ^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+
+warning: use of deprecated associated function `whisper_rs::WhisperContext::new`: Use `new_with_params` instead
+  --> src/ai/stt/whisper_local.rs:34:39
+   |
+34 |             let ctx = WhisperContext::new(&path_str).map_err(|e| anyhow::anyhow!("Whisper load error: {}", e))?;
+   |                                       ^^^
+
+warning: variable does not need to be mutable
+   --> src/call/orchestrator.rs:161:22
+    |
+161 |             let (tx, mut rx) = mpsc::channel::<Vec<i16>>(32);
+    |                      ----^^
+    |                      |
+    |                      help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `rx`
+   --> src/call/orchestrator.rs:161:22
+    |
+161 |             let (tx, mut rx) = mpsc::channel::<Vec<i16>>(32);
+    |                      ^^^^^^ help: if this is intentional, prefix it with an underscore: `_rx`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `orch`
+   --> src/call/orchestrator.rs:177:21
+    |
+177 |                 let orch = self.clone(); // Need to Arc this in real implementation, simplified here
+    |                     ^^^^ help: if this is intentional, prefix it with an underscore: `_orch`
+
+warning: unused variable: `call_id`
+   --> src/call/orchestrator.rs:201:43
+    |
+201 |     pub async fn handle_call_ended(&self, call_id: String) {
+    |                                           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_call_id`
+
+warning: unused variable: `state`
+ --> src/commands/bluetooth_cmds.rs:6:29
+  |
+6 | pub async fn scan_bluetooth(state: State<'_, AppState>) -> Result<Vec<BluetoothDevice>, String> {
+  |                             ^^^^^ help: if this is intentional, prefix it with an underscore: `_state`
+
+warning: unused variable: `state`
+  --> src/commands/bluetooth_cmds.rs:12:32
+   |
+12 | pub async fn connect_bluetooth(state: State<'_, AppState>, address: String) -> Result<(), String> {
+   |                                ^^^^^ help: if this is intentional, prefix it with an underscore: `_state`
+
+warning: unused variable: `address`
+  --> src/commands/bluetooth_cmds.rs:12:60
+   |
+12 | pub async fn connect_bluetooth(state: State<'_, AppState>, address: String) -> Result<(), String> {
+   |                                                            ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_address`
+
+warning: unused variable: `state`
+  --> src/commands/bluetooth_cmds.rs:17:35
+   |
+17 | pub async fn disconnect_bluetooth(state: State<'_, AppState>) -> Result<(), String> {
+   |                                   ^^^^^ help: if this is intentional, prefix it with an underscore: `_state`
+
+warning: unused variable: `state`
+  --> src/commands/bluetooth_cmds.rs:22:28
+   |
+22 | pub fn get_bluetooth_state(state: State<'_, AppState>) -> Result<bool, String> {
+   |                            ^^^^^ help: if this is intentional, prefix it with an underscore: `_state`
+
+warning: unused variable: `state`
+  --> src/commands/model_cmds.rs:92:27
+   |
+92 | pub fn get_device_profile(state: State<'_, AppState>) -> crate::models::device_profiler::DeviceProfile {
+   |                           ^^^^^ help: if this is intentional, prefix it with an underscore: `_state`
+
+warning: unused variable: `app_handle`
+  --> src/telegram/bot.rs:27:142
+   |
+27 | ...RwLock<AppSettings>>, app_handle: AppHandle) {
+   |                          ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_app_handle`
+
+error: future cannot be sent between threads safely
+   --> src/lib.rs:114:13
+    |
+114 | /             tauri::async_runtime::spawn(async move {
+115 | |                 let (token, chat_id) = {
+116 | |                     let cfg = s.read();
+117 | |                     if !cfg.telegram_bot_token.is_empty() && !cfg.telegram_chat_id.is_empty() {
+...   |
+131 | |             });
+    | |______________^ future created by async block is not `Send`
+    |
+    = help: within `{async block@src/lib.rs:114:41: 114:51}`, the trait `std::marker::Send` is not implemented for `*mut ()`
+note: future is not `Send` as this value is used across an await
+   --> src/telegram/bot.rs:114:49
+    |
+100 |                 let s = settings.read();
+    |                     - has type `parking_lot::lock_api::RwLockReadGuard<'_, parking_lot::RawRwLock, AppSettings>` which is not `Send`
+...
+114 |                 let _ = self.send_message(&msg).await;
+    |                                                 ^^^^^ await occurs here, with `s` maybe used later
+note: required by a bound in `tauri::async_runtime::spawn`
+   --> /Users/falcon/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tauri-2.11.0/src/async_runtime.rs:281:15
+    |
+279 | pub fn spawn<F>(task: F) -> JoinHandle<F::Output>
+    |        ----- required by a bound in this function
+280 | where
+281 |   F: Future + Send + 'static,
+    |               ^^^^ required by this bound in `spawn`
+
+warning: `void-relay` (lib) generated 25 warnings
+error: could not compile `void-relay` (lib) due to 1 previous error; 25 warnings emitted

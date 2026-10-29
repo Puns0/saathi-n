@@ -1,0 +1,231 @@
+   Compiling void-relay v1.0.0 (/Users/falcon/Downloads/claude/saathi/void-relay/src-tauri)
+warning: unused import: `bytes::Bytes`
+ --> src/ai/llm/groq_client.rs:7:5
+  |
+7 | use bytes::Bytes;
+  |     ^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `tokio::sync::mpsc`
+ --> src/ai/llm/llm_router.rs:4:5
+  |
+4 | use tokio::sync::mpsc;
+  |     ^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `Engine as _` and `engine::general_purpose::STANDARD`
+ --> src/ai/stt/sarvam_stt.rs:4:14
+  |
+4 | use base64::{Engine as _, engine::general_purpose::STANDARD};
+  |              ^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `HostTrait`
+ --> src/audio/capture.rs:3:33
+  |
+3 | use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
+  |                                 ^^^^^^^^^
+
+warning: unused import: `cpal::traits::HostTrait`
+ --> src/audio/pipeline.rs:4:5
+  |
+4 | use cpal::traits::HostTrait;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `HostTrait`
+ --> src/audio/playback.rs:1:33
+  |
+1 | use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
+  |                                 ^^^^^^^^^
+
+warning: unused import: `std::sync::Arc`
+ --> src/bluetooth/audio_bridge.rs:1:5
+  |
+1 | use std::sync::Arc;
+  |     ^^^^^^^^^^^^^^
+
+warning: unused import: `DeviceTrait`
+  --> src/bluetooth/platform/windows.rs:43:28
+   |
+43 |         use cpal::traits::{DeviceTrait, HostTrait};
+   |                            ^^^^^^^^^^^
+
+warning: unused import: `Manager`
+  --> src/bridge/ws_server.rs:11:13
+   |
+11 | use tauri::{Manager, Emitter};
+   |             ^^^^^^^
+
+warning: unused import: `Deserialize`
+ --> src/call/orchestrator.rs:5:13
+  |
+5 | use serde::{Deserialize, Serialize};
+  |             ^^^^^^^^^^^
+
+warning: unused import: `Manager`
+ --> src/models/downloader.rs:5:24
+  |
+5 | use tauri::{AppHandle, Manager, Emitter};
+  |                        ^^^^^^^
+
+warning: unused import: `tokio::sync::Mutex`
+ --> src/models/downloader.rs:9:5
+  |
+9 | use tokio::sync::Mutex;
+  |     ^^^^^^^^^^^^^^^^^^
+
+warning: use of deprecated associated function `whisper_rs::WhisperContext::new`: Use `new_with_params` instead
+  --> src/ai/stt/indic_whisper.rs:31:39
+   |
+31 |             let ctx = WhisperContext::new(&path_str).map_err(|e| anyhow::anyhow!("Whisper load error: {}", e))?;
+   |                                       ^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+
+warning: use of deprecated associated function `whisper_rs::WhisperContext::new`: Use `new_with_params` instead
+  --> src/ai/stt/whisper_local.rs:34:39
+   |
+34 |             let ctx = WhisperContext::new(&path_str).map_err(|e| anyhow::anyhow!("Whisper load error: {}", e))?;
+   |                                       ^^^
+
+warning: variable does not need to be mutable
+   --> src/call/orchestrator.rs:161:22
+    |
+161 |             let (tx, mut rx) = mpsc::channel::<Vec<i16>>(32);
+    |                      ----^^
+    |                      |
+    |                      help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `rx`
+   --> src/call/orchestrator.rs:161:22
+    |
+161 |             let (tx, mut rx) = mpsc::channel::<Vec<i16>>(32);
+    |                      ^^^^^^ help: if this is intentional, prefix it with an underscore: `_rx`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `orch`
+   --> src/call/orchestrator.rs:177:21
+    |
+177 |                 let orch = self.clone(); // Need to Arc this in real implementation, simplified here
+    |                     ^^^^ help: if this is intentional, prefix it with an underscore: `_orch`
+
+warning: unused variable: `call_id`
+   --> src/call/orchestrator.rs:201:43
+    |
+201 |     pub async fn handle_call_ended(&self, call_id: String) {
+    |                                           ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_call_id`
+
+warning: unused variable: `state`
+ --> src/commands/bluetooth_cmds.rs:6:29
+  |
+6 | pub async fn scan_bluetooth(state: State<'_, AppState>) -> Result<Vec<BluetoothDevice>, String> {
+  |                             ^^^^^ help: if this is intentional, prefix it with an underscore: `_state`
+
+warning: unused variable: `state`
+  --> src/commands/bluetooth_cmds.rs:12:32
+   |
+12 | pub async fn connect_bluetooth(state: State<'_, AppState>, address: String) -> Result<(), String> {
+   |                                ^^^^^ help: if this is intentional, prefix it with an underscore: `_state`
+
+warning: unused variable: `address`
+  --> src/commands/bluetooth_cmds.rs:12:60
+   |
+12 | pub async fn connect_bluetooth(state: State<'_, AppState>, address: String) -> Result<(), String> {
+   |                                                            ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_address`
+
+warning: unused variable: `state`
+  --> src/commands/bluetooth_cmds.rs:17:35
+   |
+17 | pub async fn disconnect_bluetooth(state: State<'_, AppState>) -> Result<(), String> {
+   |                                   ^^^^^ help: if this is intentional, prefix it with an underscore: `_state`
+
+warning: unused variable: `state`
+  --> src/commands/bluetooth_cmds.rs:22:28
+   |
+22 | pub fn get_bluetooth_state(state: State<'_, AppState>) -> Result<bool, String> {
+   |                            ^^^^^ help: if this is intentional, prefix it with an underscore: `_state`
+
+warning: unused variable: `state`
+  --> src/commands/model_cmds.rs:92:27
+   |
+92 | pub fn get_device_profile(state: State<'_, AppState>) -> crate::models::device_profiler::DeviceProfile {
+   |                           ^^^^^ help: if this is intentional, prefix it with an underscore: `_state`
+
+warning: unused variable: `app_handle`
+  --> src/telegram/bot.rs:27:142
+   |
+27 | ...RwLock<AppSettings>>, app_handle: AppHandle) {
+   |                          ^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_app_handle`
+
+warning: field `model_manager` is never read
+  --> src/ai/language_detector.rs:24:5
+   |
+23 | pub struct LanguageDetector {
+   |            ---------------- field in this struct
+24 |     model_manager: Arc<ModelManager>,
+   |     ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `model_manager` is never read
+  --> src/ai/stt/stt_router.rs:12:5
+   |
+10 | pub struct SttRouter {
+   |            --------- field in this struct
+11 |     settings: Arc<RwLock<AppSettings>>,
+12 |     model_manager: Arc<ModelManager>,
+   |     ^^^^^^^^^^^^^
+
+warning: field `model_manager` is never read
+  --> src/ai/tts/tts_router.rs:12:5
+   |
+10 | pub struct TtsRouter {
+   |            --------- field in this struct
+11 |     settings: Arc<RwLock<AppSettings>>,
+12 |     model_manager: Arc<ModelManager>,
+   |     ^^^^^^^^^^^^^
+
+warning: field `models_dir` is never read
+  --> src/models/downloader.rs:22:5
+   |
+21 | pub struct DownloadManager {
+   |            --------------- field in this struct
+22 |     models_dir: PathBuf,
+   |     ^^^^^^^^^^
+
+warning: call to `.clone()` on a reference in this situation does nothing
+   --> src/call/orchestrator.rs:177:32
+    |
+177 |                 let orch = self.clone(); // Need to Arc this in real implementation, simplified here
+    |                                ^^^^^^^^
+    |
+    = note: the type `CallOrchestrator` does not implement `Clone`, so calling `clone` on `&CallOrchestrator` copies the reference, which does not do anything and can be removed
+    = note: `#[warn(noop_method_call)]` on by default
+help: remove this redundant call
+    |
+177 -                 let orch = self.clone(); // Need to Arc this in real implementation, simplified here
+177 +                 let orch = self; // Need to Arc this in real implementation, simplified here
+    |
+help: if you meant to clone `CallOrchestrator`, implement `Clone` for it
+    |
+ 40 + #[derive(Clone)]
+ 41 | pub struct CallOrchestrator {
+    |
+
+warning: `void-relay` (lib) generated 30 warnings (run `cargo fix --lib -p void-relay` to apply 24 suggestions)
+error[E0433]: cannot find module or crate `void_relay_lib` in this scope
+ --> src/main.rs:4:5
+  |
+4 |     void_relay_lib::run();
+  |     ^^^^^^^^^^^^^^ use of unresolved module or unlinked crate `void_relay_lib`
+  |
+help: there is a crate or module with a similar name
+  |
+4 -     void_relay_lib::run();
+4 +     void_relay::run();
+  |
+
+For more information about this error, try `rustc --explain E0433`.
+error: could not compile `void-relay` (bin "void-relay") due to 1 previous error

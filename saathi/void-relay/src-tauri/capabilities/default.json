@@ -1,0 +1,19 @@
+{
+  "identifier": "default",
+  "description": "Default permissions for the main window",
+  "windows": ["*"],
+  "permissions": [
+    "core:default",
+    "shell:default",
+    "fs:default",
+    "notification:default",
+    "autostart:default",
+    {
+      "identifier": "shell:allow-execute",
+      "allow": [
+        { "name": "ollama", "cmd": "ollama", "args": true },
+        { "name": "piper", "cmd": "piper", "args": true }
+      ]
+    }
+  ]
+}

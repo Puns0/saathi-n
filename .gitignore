@@ -1,0 +1,75 @@
+# OS files
+.DS_Store
+__MACOSX/
+Thumbs.db
+desktop.ini
+
+# Archives (too large for git)
+*.zip
+*.rar
+*.7z
+*.tar.gz
+*.tar.bz2
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Dependencies
+node_modules/
+
+# Rust / Tauri build artifacts
+**/target/
+
+# Gradle (Android)
+**/.gradle/
+**/build/
+local.properties
+
+# Frontend build outputs
+dist/
+.next/
+out/
+
+# Mobile build outputs
+*.apk
+*.ipa
+*.aab
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Scratch / temp
+scratch/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Binary / compiled files
+*.pdb
+*.dll
+*.exe
+*.lib
+*.exp
+*.rlib
+*.rmeta
+*.o
+*.obj
+*.so
+*.dylib
+
+# Xcode (iOS)
+**/DerivedData/
+**/*.xcuserdata/
+**/Pods/
+
+# CocoaPods
+**/Podfile.lock
+
+# Package caches
+**/.build/

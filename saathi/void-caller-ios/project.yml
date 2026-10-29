@@ -1,0 +1,18 @@
+name: VoidCaller
+options:
+  bundleIdPrefix: com.voidstack
+targets:
+  VoidCaller:
+    type: application
+    platform: iOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: VoidCaller
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.voidstack.VoidCaller
+      INFOPLIST_FILE: VoidCaller/Info.plist
+      DEVELOPMENT_TEAM: "" # Replace with user's team ID if known
+      CODE_SIGN_STYLE: Automatic
+      ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+      TARGETED_DEVICE_FAMILY: "1,2"
+      ENABLE_BITCODE: NO

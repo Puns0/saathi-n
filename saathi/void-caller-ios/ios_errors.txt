@@ -1,0 +1,3 @@
+2026-05-04 22:48:51.955 xcodebuild[30250:333693] [MT] IDERunDestination: Supported platforms for the buildables in the current scheme is empty.
+2026-05-04 22:48:51.969 xcodebuild[30250:333693] Writing error result bundle to /var/folders/xg/y363j6rj4k99p8nh_yp3kkj80000gn/T/ResultBundle_2026-04-05_22-48-0051.xcresult
+xcodebuild: error: Found no destinations for the scheme 'VoidCaller' and action build.
