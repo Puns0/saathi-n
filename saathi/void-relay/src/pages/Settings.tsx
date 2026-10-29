@@ -6,7 +6,7 @@ export default function Settings() {
   const [settings, setSettings] = useState<any>(null);
   const [saving, setSaving] = useState(false);
   const [audioDevices, setAudioDevices] = useState<{name: string, kind: string}[]>([]);
-  const [routingMode, setRoutingMode] = useState<'direct_speakerphone' | 'bluetooth_hfp' | 'single_cable' | 'dual_cable'>('direct_speakerphone');
+  const [routingMode, setRoutingMode] = useState<'direct_speakerphone' | 'bluetooth_hfp' | 'single_cable' | 'dual_cable' | 'standard'>('direct_speakerphone');
   const [showAdvancedPhoneLink, setShowAdvancedPhoneLink] = useState(false);
   const [routingCall, setRoutingCall] = useState(false);
 

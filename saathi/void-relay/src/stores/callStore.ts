@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type CallState = 'IDLE' | 'INITIATING' | 'RINGING' | 'CONNECTED' | 'LISTENING' | 'PROCESSING' | 'SPEAKING' | 'ENDED';
+export type CallState = 'IDLE' | 'INITIATING' | 'RINGING' | 'CONNECTED' | 'SCREENING' | 'HANDOFF' | 'LISTENING' | 'PROCESSING' | 'SPEAKING' | 'ENDED';
 
 export interface ChatMessage {
   id: string;

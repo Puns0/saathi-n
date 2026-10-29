@@ -13,9 +13,7 @@ import {
   CheckCircle2, 
   AlertTriangle, 
   Zap, 
-  Check, 
-  Smartphone,
-  Sliders,
+  Sliders, 
   Sparkles
 } from 'lucide-react';
 
