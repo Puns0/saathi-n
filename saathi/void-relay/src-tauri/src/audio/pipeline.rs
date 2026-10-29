@@ -2,6 +2,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 use tokio::sync::mpsc;
 use cpal::traits::{DeviceTrait, HostTrait};
+use tauri::Emitter;
 
 use super::capture::AudioCapture;
 use super::playback::AudioPlayback;
@@ -11,12 +12,14 @@ pub struct AudioPipeline {
     capture: AudioCapture,
     playback: AudioPlayback,
     pub suppress_capture: Arc<AtomicBool>,
+    pub app_handle: Option<tauri::AppHandle>,
+    pub half_duplex_tail_ms: u64,
 }
 
 /// Resolve a named audio device from cpal, or fall back to the system default.
 fn resolve_input_device(name: &str) -> Option<cpal::Device> {
     let host = cpal::default_host();
-    if name.is_empty() {
+    if name.is_empty() || name == "default" {
         return host.default_input_device();
     }
     if let Ok(devices) = host.input_devices() {
@@ -33,7 +36,7 @@ fn resolve_input_device(name: &str) -> Option<cpal::Device> {
 
 fn resolve_output_device(name: &str) -> Option<cpal::Device> {
     let host = cpal::default_host();
-    if name.is_empty() {
+    if name.is_empty() || name == "default" {
         return host.default_output_device();
     }
     if let Ok(devices) = host.output_devices() {
@@ -54,6 +57,18 @@ impl AudioPipeline {
             capture: AudioCapture::new(),
             playback: AudioPlayback::new(),
             suppress_capture: Arc::new(AtomicBool::new(false)),
+            app_handle: None,
+            half_duplex_tail_ms: 400,
+        }
+    }
+
+    pub fn with_app_handle(app_handle: tauri::AppHandle) -> Self {
+        Self {
+            capture: AudioCapture::new(),
+            playback: AudioPlayback::new(),
+            suppress_capture: Arc::new(AtomicBool::new(false)),
+            app_handle: Some(app_handle),
+            half_duplex_tail_ms: 400,
         }
     }
 
@@ -69,7 +84,6 @@ impl AudioPipeline {
     }
 
     /// Start the pipeline using device names from settings.
-    /// Empty string = use system default. "CABLE Output" = VB-Cable input, etc.
     pub fn start_with_names(
         &mut self,
         input_name: &str,
@@ -106,6 +120,7 @@ impl AudioPipeline {
         self.playback.start(output)?;
 
         let suppress = self.suppress_capture.clone();
+        let app_h = self.app_handle.clone();
 
         let mut current_speech = Vec::new();
         let mut pre_roll: std::collections::VecDeque<Vec<i16>> = std::collections::VecDeque::new();
@@ -116,7 +131,31 @@ impl AudioPipeline {
                     pre_roll.clear();
                     continue; // skip capture while AI is speaking (prevents echo)
                 }
+
+                // Compute real-time RMS for Level Meter
+                let capture_rms = {
+                    let mut sum = 0.0f32;
+                    for &s in &chunk {
+                        let n = s as f32 / 32768.0;
+                        sum += n * n;
+                    }
+                    (sum / chunk.len().max(1) as f32).sqrt()
+                };
+
                 let state = vad.process_chunk(&chunk);
+
+                let stt_rms = match state {
+                    VadState::Speaking | VadState::SpeechComplete => capture_rms,
+                    VadState::Silence => 0.0,
+                };
+
+                if let Some(app) = &app_h {
+                    let _ = app.emit("audio_level_meter", serde_json::json!({
+                        "capture": (capture_rms * 100.0).min(100.0),
+                        "stt": (stt_rms * 100.0).min(100.0),
+                        "tts": 0.0
+                    }));
+                }
 
                 match state {
                     VadState::Speaking => {
@@ -150,13 +189,41 @@ impl AudioPipeline {
 
     pub fn play(&mut self, audio: &[i16]) {
         self.suppress_capture.store(true, Ordering::SeqCst);
+
+        // Emit TTS level
+        let tts_rms = {
+            let mut sum = 0.0f32;
+            for &s in audio {
+                let n = s as f32 / 32768.0;
+                sum += n * n;
+            }
+            (sum / audio.len().max(1) as f32).sqrt()
+        };
+
+        if let Some(app) = &self.app_handle {
+            let _ = app.emit("audio_level_meter", serde_json::json!({
+                "capture": 0.0,
+                "stt": 0.0,
+                "tts": (tts_rms * 100.0).min(100.0)
+            }));
+        }
+
         self.playback.play_audio(audio);
         let frames = audio.len();
         let ms = frames as u64 * 1000 / 8000; // Assuming 8kHz
         let supp = self.suppress_capture.clone();
+        let app_opt = self.app_handle.clone();
+        let tail_ms = self.half_duplex_tail_ms;
         tokio::spawn(async move {
-            tokio::time::sleep(tokio::time::Duration::from_millis(ms + 200)).await;
+            tokio::time::sleep(tokio::time::Duration::from_millis(ms + tail_ms)).await;
             supp.store(false, Ordering::SeqCst);
+            if let Some(app) = &app_opt {
+                let _ = app.emit("audio_level_meter", serde_json::json!({
+                    "capture": 0.0,
+                    "stt": 0.0,
+                    "tts": 0.0
+                }));
+            }
         });
     }
 

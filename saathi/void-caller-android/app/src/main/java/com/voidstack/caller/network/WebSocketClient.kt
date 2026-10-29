@@ -16,6 +16,8 @@ class WebSocketClient(
     private var isConnected = false
     private val TAG = "VoidWsClient"
 
+    fun isWsConnected(): Boolean = isConnected
+
     interface WsListener {
         fun onConnected()
         fun onDisconnected()

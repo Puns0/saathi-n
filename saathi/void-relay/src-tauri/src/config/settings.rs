@@ -11,6 +11,7 @@ pub struct AppSettings {
     pub system_prompt: String,
     pub vad_sensitivity: f32,
     pub silence_timeout_ms: u32,
+    pub half_duplex_tail_ms: u64,
     pub streaming_tts: bool,
     pub user_name: String,
 
@@ -75,7 +76,8 @@ impl Default for AppSettings {
             default_language: "auto".to_string(),
             system_prompt: "You are a voice assistant making/receiving a phone call on behalf of the user. Rules:\n- Keep ALL responses under 2 sentences unless asked for detail\n- Speak naturally — you are in a live phone call\n- Match the language of the caller (Kannada/Hindi/English)\n- Be polite, professional, and concise\n- Do not reveal you are an AI unless directly asked".to_string(),
             vad_sensitivity: 0.008,
-            silence_timeout_ms: 800,
+            silence_timeout_ms: 700,
+            half_duplex_tail_ms: 400,
             streaming_tts: true,
             user_name: "User".to_string(),
             android_phone_name: "Android Phone".to_string(),

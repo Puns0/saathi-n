@@ -65,6 +65,40 @@ class AudioRouter(private val context: Context) {
         }
     }
 
+    fun enableSpeakerphone() {
+        try {
+            audioManager.mode = AudioManager.MODE_IN_CALL
+            audioManager.isSpeakerphoneOn = true
+            Log.i(TAG, "Speakerphone enabled")
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to enable speakerphone", e)
+        }
+    }
+
+    fun disableSpeakerphone() {
+        try {
+            audioManager.isSpeakerphoneOn = false
+            Log.i(TAG, "Speakerphone disabled")
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to disable speakerphone", e)
+        }
+    }
+
+    fun applyCallRouting(mode: String) {
+        when (mode) {
+            "speakerphone" -> enableSpeakerphone()
+            "wired" -> {
+                audioManager.mode = AudioManager.MODE_IN_CALL
+                audioManager.isSpeakerphoneOn = false
+                audioManager.isBluetoothScoOn = false
+                audioManager.stopBluetoothSco()
+                Log.i(TAG, "Wired routing applied")
+            }
+            "bluetooth" -> enableBluetoothSco()
+            else -> enableBluetoothSco()
+        }
+    }
+
     fun disableBluetoothSco() {
         try {
             Log.i(TAG, "Disabling Bluetooth SCO")
@@ -73,9 +107,16 @@ class AudioRouter(private val context: Context) {
             }
             audioManager.isBluetoothScoOn = false
             audioManager.stopBluetoothSco()
+            audioManager.isSpeakerphoneOn = false
             audioManager.mode = AudioManager.MODE_NORMAL
         } catch (e: Exception) {
             Log.e(TAG, "Failed to disable BT SCO", e)
         }
+    }
+
+    fun resetRouting() {
+        disableBluetoothSco()
+        disableSpeakerphone()
+        audioManager.mode = AudioManager.MODE_NORMAL
     }
 }

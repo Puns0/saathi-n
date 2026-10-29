@@ -6,19 +6,24 @@ export default function Settings() {
   const [settings, setSettings] = useState<any>(null);
   const [saving, setSaving] = useState(false);
   const [audioDevices, setAudioDevices] = useState<{name: string, kind: string}[]>([]);
-  const [routingMode, setRoutingMode] = useState<'standard' | 'single_cable' | 'dual_cable'>('standard');
+  const [routingMode, setRoutingMode] = useState<'direct_speakerphone' | 'bluetooth_hfp' | 'single_cable' | 'dual_cable'>('direct_speakerphone');
+  const [showAdvancedPhoneLink, setShowAdvancedPhoneLink] = useState(false);
   const [routingCall, setRoutingCall] = useState(false);
 
   useEffect(() => {
     if (settings) {
-      const inputLower = settings.audio_input_device.toLowerCase();
-      const outputLower = settings.audio_output_device.toLowerCase();
-      if (inputLower.includes('cable-a') || outputLower.includes('cable-b') || inputLower.includes('voicemeeter') || outputLower.includes('voicemeeter')) {
+      const inputLower = (settings.audio_input_device || '').toLowerCase();
+      const outputLower = (settings.audio_output_device || '').toLowerCase();
+      if (inputLower.includes('oneplus') || outputLower.includes('oneplus') || inputLower.includes('hands-free') || outputLower.includes('hands-free')) {
+        setRoutingMode('bluetooth_hfp');
+      } else if (inputLower.includes('cable-a') || outputLower.includes('cable-b')) {
         setRoutingMode('dual_cable');
+        setShowAdvancedPhoneLink(true);
       } else if (inputLower.includes('cable') || outputLower.includes('cable')) {
         setRoutingMode('single_cable');
+        setShowAdvancedPhoneLink(true);
       } else {
-        setRoutingMode('standard');
+        setRoutingMode('direct_speakerphone');
       }
     }
   }, [settings]);
@@ -274,6 +279,20 @@ export default function Settings() {
               />
               <p className="text-xs text-gray-500 mt-1">Lower values respond faster but might cut off slow speakers.</p>
             </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-400 mb-1 flex justify-between">
+                <span>Half-Duplex Mute Tail (ms)</span>
+                <span className="text-accent">{settings.half_duplex_tail_ms ?? 400}ms</span>
+              </label>
+              <input 
+                type="range" min="100" max="1000" step="50"
+                className="w-full accent-accent"
+                value={settings.half_duplex_tail_ms ?? 400}
+                onChange={e => handleChange('half_duplex_tail_ms', parseInt(e.target.value))}
+              />
+              <p className="text-xs text-gray-500 mt-1">Suppresses microphone after AI voice finishes speaking to eliminate room echo.</p>
+            </div>
           </div>
         </div>
 
@@ -291,27 +310,48 @@ export default function Settings() {
             </h3>
             
             {/* Routing Mode Selector Tabs */}
-            <div className="flex bg-black/40 p-1 rounded-lg border border-white/5 text-xs">
+            <div className="flex flex-wrap items-center gap-2 text-xs">
+              <div className="flex bg-black/40 p-1 rounded-lg border border-white/5">
+                <button
+                  type="button"
+                  onClick={() => setRoutingMode('direct_speakerphone')}
+                  className={`px-3 py-1.5 rounded-md transition-all duration-300 ${routingMode === 'direct_speakerphone' ? 'bg-green-500/20 text-green-400 border border-green-500/30 font-semibold' : 'text-gray-400 hover:text-white'}`}
+                >
+                  Direct: speakerphone (Path C)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRoutingMode('bluetooth_hfp')}
+                  className={`px-3 py-1.5 rounded-md transition-all duration-300 ${routingMode === 'bluetooth_hfp' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 font-semibold' : 'text-gray-400 hover:text-white'}`}
+                >
+                  Bluetooth Hands-Free (Path A)
+                </button>
+                {showAdvancedPhoneLink && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => setRoutingMode('single_cable')}
+                      className={`px-3 py-1.5 rounded-md transition-all duration-300 ${routingMode === 'single_cable' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30 font-semibold' : 'text-gray-400 hover:text-white'}`}
+                    >
+                      Phone Link (Single Cable)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setRoutingMode('dual_cable')}
+                      className={`px-3 py-1.5 rounded-md transition-all duration-300 ${routingMode === 'dual_cable' ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30 font-semibold' : 'text-gray-400 hover:text-white'}`}
+                    >
+                      Phone Link (Dual Cable)
+                    </button>
+                  </>
+                )}
+              </div>
+
               <button
                 type="button"
-                onClick={() => setRoutingMode('standard')}
-                className={`px-3 py-1.5 rounded-md transition-all duration-300 ${routingMode === 'standard' ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'text-gray-400 hover:text-white'}`}
+                onClick={() => setShowAdvancedPhoneLink(!showAdvancedPhoneLink)}
+                className="px-2.5 py-1.5 text-[11px] text-gray-500 hover:text-gray-300 bg-white/5 hover:bg-white/10 rounded-lg border border-white/5 transition-colors"
               >
-                PC Speakers & Mic
-              </button>
-              <button
-                type="button"
-                onClick={() => setRoutingMode('single_cable')}
-                className={`px-3 py-1.5 rounded-md transition-all duration-300 ${routingMode === 'single_cable' ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'text-gray-400 hover:text-white'}`}
-              >
-                Phone Link (Single Cable)
-              </button>
-              <button
-                type="button"
-                onClick={() => setRoutingMode('dual_cable')}
-                className={`px-3 py-1.5 rounded-md transition-all duration-300 ${routingMode === 'dual_cable' ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'text-gray-400 hover:text-white'}`}
-              >
-                Phone Link (Dual Cable)
+                {showAdvancedPhoneLink ? 'Hide Phone Link Modes' : 'Advanced Phone Link Modes'}
               </button>
             </div>
           </div>
@@ -322,22 +362,70 @@ export default function Settings() {
               <Info className="w-4 h-4 text-blue-400" /> Active Audio Path Visualization
             </h4>
 
-            {routingMode === 'standard' && (
-              <div className="flex flex-col md:flex-row items-center justify-around gap-6 py-4 animate-in fade-in zoom-in-95 duration-300">
-                <div className="flex flex-col items-center gap-2 p-3 bg-white/5 rounded-lg border border-white/5 w-44 text-center">
-                  <Smartphone className="w-8 h-8 text-gray-400" />
-                  <span className="text-xs font-semibold">Phone Caller</span>
-                  <span className="text-[10px] text-gray-500">Auto-Answer Active</span>
+            {routingMode === 'direct_speakerphone' && (
+              <div className="space-y-4 animate-in fade-in zoom-in-95 duration-300">
+                <div className="flex flex-col md:flex-row items-center justify-around gap-6 py-4">
+                  <div className="flex flex-col items-center gap-2 p-3 bg-white/5 rounded-lg border border-white/5 w-48 text-center">
+                    <Smartphone className="w-8 h-8 text-amber-400 animate-pulse" />
+                    <span className="text-xs font-semibold text-white">Phone on Desk</span>
+                    <span className="text-[10px] text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded-full">Speakerphone ON</span>
+                    <span className="text-[9px] text-gray-400">15 - 25 cm from laptop</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-1 text-gray-400">
+                    <div className="flex items-center gap-1 text-emerald-400">
+                      <span className="text-[10px] font-mono">Caller voice &rarr; PC Mic</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </div>
+                    <span className="text-[10px] font-mono bg-white/10 px-2.5 py-1 rounded-full text-gray-300">
+                      Acoustic Air Bridge
+                    </span>
+                    <div className="flex items-center gap-1 text-cyan-400">
+                      <ArrowRight className="w-4 h-4 rotate-180" />
+                      <span className="text-[10px] font-mono">AI voice &rarr; Phone Mic</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-center gap-2 p-3 bg-green-500/10 border border-green-500/20 rounded-lg w-48 text-center shadow-lg shadow-green-500/5">
+                    <Mic className="w-8 h-8 text-green-400" />
+                    <span className="text-xs font-semibold text-green-300">PC Laptop Mic & Speakers</span>
+                    <span className="text-[10px] text-green-400/80 bg-green-500/20 px-2 py-0.5 rounded-full font-mono">
+                      Half-Duplex Active ({settings.half_duplex_tail_ms ?? 400}ms tail)
+                    </span>
+                    <span className="text-[9px] text-gray-400">Zero loopback / No echo</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1.5 text-gray-500">
-                  <ArrowRight className="w-5 h-5 text-green-400 animate-bounce-horizontal" />
-                  <span className="text-[10px] font-mono tracking-wider bg-white/5 px-2 py-0.5 rounded">WEB SOCKET</span>
-                  <ArrowRight className="w-5 h-5 text-green-400 animate-bounce-horizontal" />
+
+                <div className="p-3 bg-amber-500/10 rounded-xl border border-amber-500/20 text-xs text-amber-300 space-y-1">
+                  <div className="font-semibold flex items-center gap-1.5">
+                    <Sparkles className="w-4 h-4 text-amber-400" /> Placement & External Mic Recommendation:
+                  </div>
+                  <p className="text-[11px] text-gray-300">
+                    Place your phone flat next to your laptop keyboard (15-25 cm distance). Keep phone speaker volume at ~65%. 
+                    Microphone is automatically muted while the AI speaks plus a {settings.half_duplex_tail_ms ?? 400}ms tail. 
+                    <strong className="text-amber-200"> Pro-tip:</strong> For flawless hackathon demos in noisy environments, place a cheap USB lavalier mic right beside the phone speaker.
+                  </p>
                 </div>
-                <div className="flex flex-col items-center gap-2 p-3 bg-green-500/10 border border-green-500/20 rounded-lg w-44 text-center shadow-lg shadow-green-500/5">
-                  <Mic className="w-8 h-8 text-green-400" />
-                  <span className="text-xs font-semibold text-green-300">SAATHI (PC App)</span>
-                  <span className="text-[10px] text-green-400/80">Using system speakers & mic</span>
+              </div>
+            )}
+
+            {routingMode === 'bluetooth_hfp' && (
+              <div className="space-y-4 animate-in fade-in zoom-in-95 duration-300">
+                <div className="flex flex-col md:flex-row items-center justify-around gap-6 py-4">
+                  <div className="flex flex-col items-center gap-2 p-3 bg-cyan-500/10 border border-cyan-500/20 rounded-lg w-48 text-center">
+                    <Smartphone className="w-8 h-8 text-cyan-400" />
+                    <span className="text-xs font-semibold text-cyan-300">OnePlus Nord CE5</span>
+                    <span className="text-[10px] text-cyan-400 bg-cyan-500/20 px-2 py-0.5 rounded-full">Bluetooth HFP</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-1 text-gray-400">
+                    <span className="text-[10px] font-mono text-cyan-300 bg-white/5 px-2 py-0.5 rounded">
+                      Windows BTHHFPAudio
+                    </span>
+                    <ArrowRight className="w-5 h-5 text-cyan-400" />
+                  </div>
+                  <div className="flex flex-col items-center gap-2 p-3 bg-white/5 rounded-lg border border-white/5 w-48 text-center">
+                    <Radio className="w-8 h-8 text-green-400" />
+                    <span className="text-xs font-semibold">Voicemeeter / Direct HFP</span>
+                    <span className="text-[10px] text-gray-400 font-mono">B1 (In) / AUX B2 (Out)</span>
+                  </div>
                 </div>
               </div>
             )}

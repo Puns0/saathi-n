@@ -99,7 +99,7 @@ impl AudioPlayback {
     }
 }
 
-fn resample(input: &[i16], from_rate: u32, to_rate: u32) -> Vec<i16> {
+pub fn resample(input: &[i16], from_rate: u32, to_rate: u32) -> Vec<i16> {
     if from_rate == to_rate {
         return input.to_vec();
     }

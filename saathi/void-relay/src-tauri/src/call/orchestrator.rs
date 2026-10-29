@@ -22,6 +22,8 @@ pub enum CallState {
     Initiating,
     Ringing,
     Connected,
+    Screening,
+    Handoff,
     Listening,
     Processing,
     Speaking,
@@ -36,6 +38,8 @@ pub struct ActiveCall {
     pub start_time: std::time::Instant,
     pub history: Vec<Message>,
     pub language: LanguageCode,
+    pub is_screening: bool,
+    pub caller_spoke: Arc<std::sync::atomic::AtomicBool>,
 }
 
 #[derive(Clone)]
@@ -111,6 +115,8 @@ impl CallOrchestrator {
                 start_time: std::time::Instant::now(),
                 history: Vec::new(),
                 language: LanguageCode::English,
+                is_screening: false,
+                caller_spoke: Arc::new(std::sync::atomic::AtomicBool::new(false)),
             });
         }
 
@@ -144,13 +150,14 @@ impl CallOrchestrator {
 
         let (tx, mut rx) = mpsc::channel::<Vec<i16>>(32);
 
-        let (vad_sensitivity, silence_timeout_ms, input_device, output_device) = {
+        let (vad_sensitivity, silence_timeout_ms, half_duplex_tail_ms, input_device, output_device) = {
             let s = self.settings.read();
-            (s.vad_sensitivity, s.silence_timeout_ms,
+            (s.vad_sensitivity, s.silence_timeout_ms, s.half_duplex_tail_ms,
              s.audio_input_device.clone(), s.audio_output_device.clone())
         };
 
-        let mut pipeline = AudioPipeline::new();
+        let mut pipeline = AudioPipeline::with_app_handle(self.app_handle.clone());
+        pipeline.half_duplex_tail_ms = if half_duplex_tail_ms == 0 { 400 } else { half_duplex_tail_ms };
         let vad = Vad::new(vad_sensitivity, 300, silence_timeout_ms, 8000, pipeline.suppress_capture.clone());
 
         match pipeline.start_with_names(&input_device, &output_device, tx, vad) {
@@ -170,12 +177,15 @@ impl CallOrchestrator {
                     }
                 });
 
-                // Play a TTS greeting to confirm speakers work
-                let orch = self.clone();
-                tauri::async_runtime::spawn(async move {
-                    tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
-                    orch.say_text("Hello, AI agent is ready. I am listening.".to_string()).await.ok();
-                });
+                let is_screening = self.active_call.read().as_ref().map(|c| c.is_screening).unwrap_or(false);
+                if !is_screening {
+                    // Outbound / manual call: play a brief TTS greeting to confirm speakers work
+                    let orch = self.clone();
+                    tauri::async_runtime::spawn(async move {
+                        tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
+                        orch.say_text("Hello, AI agent is ready. I am listening.".to_string()).await.ok();
+                    });
+                }
             }
             Err(e) => {
                 log::error!("Failed to start audio pipeline: {}", e);
@@ -202,15 +212,25 @@ impl CallOrchestrator {
         
         Ok(())
     }
+
+    pub async fn take_over_call(&self) -> anyhow::Result<()> {
+        log::info!("Human requested call takeover (Handoff)");
+        if let Some(mut pipeline) = self.audio_pipeline.write().take() {
+            pipeline.stop();
+        }
+        self.set_call_state(CallState::Handoff);
+        Ok(())
+    }
+
     pub async fn handle_call_started(&self, number: String, call_id: String, platform: String) {
-        {
+        let (is_screening, caller_spoke) = {
             let mut active = self.active_call.write();
             if let Some(call) = active.as_mut() {
-                if call.id == call_id {
-                    call.state = CallState::Connected;
-                }
+                call.id = call_id.clone();
+                call.state = if call.is_screening { CallState::Screening } else { CallState::Connected };
+                (call.is_screening, call.caller_spoke.clone())
             } else {
-                // Incoming call answered without prior state? Or Initiating state missed.
+                let caller_spoke = Arc::new(std::sync::atomic::AtomicBool::new(false));
                 *active = Some(ActiveCall {
                     id: call_id.clone(),
                     number: number.clone(),
@@ -219,37 +239,69 @@ impl CallOrchestrator {
                     start_time: std::time::Instant::now(),
                     history: Vec::new(),
                     language: LanguageCode::English,
+                    is_screening: false,
+                    caller_spoke: caller_spoke.clone(),
                 });
+                (false, caller_spoke)
             }
-        }
+        };
 
-        let _ = self.app_handle.emit("call_state_changed", serde_json::json!({ "state": "CONNECTED" }));
+        let state_str = if is_screening { "SCREENING" } else { "CONNECTED" };
+        let _ = self.app_handle.emit("call_state_changed", serde_json::json!({ "state": state_str }));
         let _ = self.app_handle.emit("call_started", serde_json::json!({
             "number": number,
-            "platform": platform
+            "platform": platform,
+            "screening": is_screening
         }));
 
         // Start (or restart) audio pipeline using system/configured devices
         self.start_audio_pipeline().await;
-    }
 
-    pub async fn handle_incoming_call(&self, number: String, platform: String) {
-        let mut active = self.active_call.write();
-        if active.is_none() {
-            *active = Some(ActiveCall {
-                id: uuid::Uuid::new_v4().to_string(),
-                number: number.clone(),
-                platform: platform.clone(),
-                state: CallState::Ringing,
-                start_time: std::time::Instant::now(),
-                history: Vec::new(),
-                language: LanguageCode::English,
+        if is_screening {
+            let orch = self.clone();
+            let user_name = self.settings.read().user_name.clone();
+            tauri::async_runtime::spawn(async move {
+                // Wait 1.5s for caller to speak first
+                tokio::time::sleep(tokio::time::Duration::from_millis(1500)).await;
+                if !caller_spoke.load(std::sync::atomic::Ordering::SeqCst) {
+                    let name_str = if user_name.trim().is_empty() { "the user".to_string() } else { user_name };
+                    let greeting = format!("Hello, this is an AI assistant answering for {}. Who is calling, and what is it about?", name_str);
+                    log::info!("Caller silent after 1.5s, playing screening greeting: {}", greeting);
+                    let _ = orch.say_text(greeting).await;
+                }
             });
         }
+    }
+
+    pub async fn handle_incoming_call(&self, number: String, platform: String, known: Option<bool>, contact_name: Option<String>) {
+        let is_known = known.unwrap_or(false);
+        let is_screening = !is_known;
+        let caller_spoke = Arc::new(std::sync::atomic::AtomicBool::new(false));
+
+        {
+            let mut active = self.active_call.write();
+            if active.is_none() {
+                *active = Some(ActiveCall {
+                    id: uuid::Uuid::new_v4().to_string(),
+                    number: number.clone(),
+                    platform: platform.clone(),
+                    state: CallState::Ringing,
+                    start_time: std::time::Instant::now(),
+                    history: Vec::new(),
+                    language: LanguageCode::English,
+                    is_screening,
+                    caller_spoke,
+                });
+            } else if let Some(call) = active.as_mut() {
+                call.is_screening = is_screening;
+            }
+        }
         let _ = self.app_handle.emit("call_state_changed", serde_json::json!({ "state": "RINGING" }));
-        let _ = self.app_handle.emit("call_started", serde_json::json!({
+        let _ = self.app_handle.emit("incoming_call", serde_json::json!({
             "number": number,
-            "platform": platform
+            "platform": platform,
+            "known": is_known,
+            "contact_name": contact_name
         }));
     }
 
@@ -317,6 +369,8 @@ impl CallOrchestrator {
             CallState::Initiating => "INITIATING",
             CallState::Ringing => "RINGING",
             CallState::Connected => "CONNECTED",
+            CallState::Screening => "SCREENING",
+            CallState::Handoff => "HANDOFF",
             CallState::Listening => "LISTENING",
             CallState::Processing => "PROCESSING",
             CallState::Speaking => "SPEAKING",
@@ -327,7 +381,13 @@ impl CallOrchestrator {
 
     // Process a chunk of speech returned from VAD
     pub async fn process_audio(&self, audio: Vec<i16>) {
+        let turn_start = std::time::Instant::now();
         self.set_call_state(CallState::Processing);
+
+        // Mark caller as having spoken (used to cancel 1.5s initial greeting timer)
+        if let Some(call) = self.active_call.read().as_ref() {
+            call.caller_spoke.store(true, std::sync::atomic::Ordering::SeqCst);
+        }
         
         let (mode, online, stt_router, llm_router, tts_router, language_detector) = {
             let engine = self.engine_router.read();
@@ -343,11 +403,13 @@ impl CallOrchestrator {
             }
         }
 
+        let stt_start = std::time::Instant::now();
         let stt_result = stt_router.transcribe(&audio, lang, online, mode).await;
+        let stt_done_ms = stt_start.elapsed().as_millis() as u64;
         
         match stt_result {
             Ok(transcript) => {
-                log::info!("Caller: {}", transcript);
+                log::info!("Caller: {} (STT: {}ms)", transcript, stt_done_ms);
                 // 1. Add to history
                 let history = {
                     let mut active = self.active_call.write();
@@ -364,14 +426,67 @@ impl CallOrchestrator {
 
                 let _ = self.app_handle.emit("stt_transcript", serde_json::json!({ "text": transcript }));
 
-                // 2. Stream LLM
-                match llm_router.chat(transcript, &history, online, mode).await {
+                let llm_start = std::time::Instant::now();
+                let mut first_token_ms: Option<u64> = None;
+                let mut first_audio_ms: Option<u64> = None;
+
+                // 2. Stream LLM with 1.0s filler threshold
+                match llm_router.chat(transcript.clone(), &history, online, mode).await {
                     Ok(mut stream) => {
                         self.set_call_state(CallState::Speaking);
                         let mut full_response = String::new();
                         let mut sentence_buffer = String::new();
+
+                        // If first token takes > 1000ms, play filler
+                        let first_token_fut = stream.next();
+                        let first_token = match tokio::time::timeout(tokio::time::Duration::from_millis(1000), first_token_fut).await {
+                            Ok(token_opt) => token_opt,
+                            Err(_) => {
+                                let filler = match lang {
+                                    LanguageCode::Hindi | LanguageCode::Mixed => "Ek minute...",
+                                    LanguageCode::Kannada => "Ondu nimisha...",
+                                    _ => "One moment...",
+                                };
+                                log::info!("LLM response delayed > 1s, sending filler: {}", filler);
+                                if let Ok(filler_audio) = tts_router.synthesize(filler.to_string(), lang, online, mode).await {
+                                    if let Some(pipeline) = self.audio_pipeline.write().as_mut() {
+                                        pipeline.play(&filler_audio);
+                                    }
+                                }
+                                stream.next().await
+                            }
+                        };
+
+                        if let Some(token) = first_token {
+                            first_token_ms = Some(llm_start.elapsed().as_millis() as u64);
+                            full_response.push_str(&token);
+                            sentence_buffer.push_str(&token);
+                            let _ = self.app_handle.emit("llm_token", serde_json::json!({ "token": token }));
+
+                            if token.contains('.') || token.contains('?') || token.contains('!') {
+                                let tts_text = sentence_buffer.trim().to_string();
+                                sentence_buffer.clear();
+                                if !tts_text.is_empty() {
+                                    let tts_start = std::time::Instant::now();
+                                    match tts_router.synthesize(tts_text, lang, online, mode).await {
+                                        Ok(audio) => {
+                                            if first_audio_ms.is_none() {
+                                                first_audio_ms = Some(tts_start.elapsed().as_millis() as u64);
+                                            }
+                                            if let Some(pipeline) = self.audio_pipeline.write().as_mut() {
+                                                pipeline.play(&audio);
+                                            }
+                                        }
+                                        Err(e) => log::error!("TTS error: {}", e),
+                                    }
+                                }
+                            }
+                        }
                         
                         while let Some(token) = stream.next().await {
+                            if first_token_ms.is_none() {
+                                first_token_ms = Some(llm_start.elapsed().as_millis() as u64);
+                            }
                             full_response.push_str(&token);
                             sentence_buffer.push_str(&token);
                             
@@ -384,8 +499,12 @@ impl CallOrchestrator {
                                 sentence_buffer.clear();
                                 
                                 if !tts_text.is_empty() {
+                                    let tts_start = std::time::Instant::now();
                                     match tts_router.synthesize(tts_text, lang, online, mode).await {
                                         Ok(audio) => {
+                                            if first_audio_ms.is_none() {
+                                                first_audio_ms = Some(tts_start.elapsed().as_millis() as u64);
+                                            }
                                             if let Some(pipeline) = self.audio_pipeline.write().as_mut() {
                                                 pipeline.play(&audio);
                                             }
@@ -399,13 +518,27 @@ impl CallOrchestrator {
                         // Remaining buffer
                         let tts_text = sentence_buffer.trim().to_string();
                         if !tts_text.is_empty() {
+                            let tts_start = std::time::Instant::now();
                             if let Ok(audio) = tts_router.synthesize(tts_text, lang, online, mode).await {
+                                if first_audio_ms.is_none() {
+                                    first_audio_ms = Some(tts_start.elapsed().as_millis() as u64);
+                                }
                                 if let Some(pipeline) = self.audio_pipeline.write().as_mut() {
                                     pipeline.play(&audio);
                                 }
                             }
                         }
                         
+                        let total_ms = turn_start.elapsed().as_millis() as u64;
+                        let _ = self.app_handle.emit("turn_latency", serde_json::json!({
+                            "stt_ms": stt_done_ms,
+                            "llm_first_token_ms": first_token_ms.unwrap_or(0),
+                            "tts_first_audio_ms": first_audio_ms.unwrap_or(0),
+                            "total_turn_ms": total_ms,
+                            "transcript": transcript,
+                            "response": full_response
+                        }));
+
                         let _ = self.app_handle.emit("llm_finished", serde_json::json!({ "text": full_response }));
 
                         // Add AI response to history

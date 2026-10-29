@@ -13,6 +13,11 @@ pub async fn hangup_call(state: State<'_, AppState>) -> Result<(), String> {
 }
 
 #[tauri::command]
+pub async fn take_over_call(state: State<'_, AppState>) -> Result<(), String> {
+    state.orchestrator.take_over_call().await.map_err(|e| e.to_string())
+}
+
+#[tauri::command]
 pub fn get_call_state(state: State<'_, AppState>) -> String {
     format!("{:?}", state.orchestrator.get_state())
 }
@@ -38,4 +43,10 @@ pub fn clear_call_history(state: State<'_, AppState>) -> Result<(), String> {
 #[tauri::command]
 pub async fn say_text(state: State<'_, AppState>, text: String) -> Result<(), String> {
     state.orchestrator.say_text(text).await.map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub async fn process_browser_audio(state: State<'_, AppState>, samples: Vec<i16>) -> Result<(), String> {
+    state.orchestrator.process_audio(samples).await;
+    Ok(())
 }

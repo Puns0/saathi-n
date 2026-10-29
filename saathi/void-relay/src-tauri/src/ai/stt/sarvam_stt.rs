@@ -28,17 +28,18 @@ impl SarvamStt {
             anyhow::bail!("Sarvam API key not set");
         }
 
-        // Convert i16 PCM to minimal WAV in memory
+        // Convert i16 PCM to minimal 16 kHz WAV in memory
+        let resampled = crate::audio::playback_resample(audio, 8000, 16000);
         let mut wav_data = Vec::new();
         {
             let spec = hound::WavSpec {
                 channels: 1,
-                sample_rate: 8000, // Or 16000 if needed by Sarvam, but our pipeline is 8k
+                sample_rate: 16000,
                 bits_per_sample: 16,
                 sample_format: hound::SampleFormat::Int,
             };
             let mut writer = hound::WavWriter::new(std::io::Cursor::new(&mut wav_data), spec)?;
-            for &sample in audio {
+            for &sample in &resampled {
                 writer.write_sample(sample)?;
             }
             writer.finalize()?;

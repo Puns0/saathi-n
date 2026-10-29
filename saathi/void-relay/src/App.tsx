@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { listen } from '@tauri-apps/api/event';
 import { useAppStore } from './stores/appStore';
 import Dashboard from './pages/Dashboard';
+import Diagnostics from './pages/Diagnostics';
 import CallHistory from './pages/CallHistory';
 import Models from './pages/Models';
 import Settings from './pages/Settings';
@@ -45,6 +46,7 @@ function App() {
         
         <div className="relative z-10 p-8 max-w-7xl mx-auto h-full">
           {activeTab === 'dashboard' && <Dashboard />}
+          {activeTab === 'diagnostics' && <Diagnostics />}
           {activeTab === 'history' && <CallHistory />}
           {activeTab === 'models' && <Models />}
           {activeTab === 'settings' && <Settings />}

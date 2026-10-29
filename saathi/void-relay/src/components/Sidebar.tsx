@@ -1,4 +1,4 @@
-import { LayoutDashboard, History, Box, Settings, Activity } from 'lucide-react';
+import { LayoutDashboard, History, Box, Settings, Activity, Gauge } from 'lucide-react';
 import { useAppStore } from '../stores/appStore';
 
 export default function Sidebar() {
@@ -6,6 +6,7 @@ export default function Sidebar() {
 
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'diagnostics', label: 'Diagnostics', icon: Gauge },
     { id: 'history', label: 'Call Archives', icon: History },
     { id: 'models', label: 'Models & Engine', icon: Box },
     { id: 'settings', label: 'Settings', icon: Settings },

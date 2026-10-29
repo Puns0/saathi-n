@@ -14,6 +14,8 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.voidstack.caller.network.WebSocketClient
 import com.voidstack.caller.telephony.CallManager
+import com.voidstack.caller.telephony.ContactHelper
+import com.voidstack.caller.telephony.WhitelistManager
 import com.voidstack.caller.audio.AudioRouter
 
 class ConnectionService : Service(), WebSocketClient.WsListener {
@@ -21,11 +23,13 @@ class ConnectionService : Service(), WebSocketClient.WsListener {
     private lateinit var wsClient: WebSocketClient
     private lateinit var callManager: CallManager
     private lateinit var audioRouter: AudioRouter
+    private lateinit var whitelistManager: WhitelistManager
     private val mainHandler = Handler(Looper.getMainLooper())
     private val TAG = "ConnectionService"
     
     private var pendingCallId: String? = null
     private var activeCallId: String? = null
+    private var autoAnswerRunnable: Runnable? = null
 
     companion object {
         private const val NOTIFICATION_ID = 1
@@ -38,6 +42,7 @@ class ConnectionService : Service(), WebSocketClient.WsListener {
         instance = this
         callManager = CallManager(this)
         audioRouter = AudioRouter(this)
+        whitelistManager = WhitelistManager(this)
         
         createNotificationChannel()
         startForeground(NOTIFICATION_ID, createNotification("Connecting to VoidRelay..."))
@@ -107,20 +112,75 @@ class ConnectionService : Service(), WebSocketClient.WsListener {
     }
     
     fun notifyIncomingCall(number: String) {
-        Log.i(TAG, "Incoming call detected: $number")
-        wsClient.sendEvent("incoming_call", mapOf("number" to number))
-        // Let the phone's native Bluetooth Auto-Answer handle the answering
-        // so that Android automatically routes call audio to MSI-PUNS0.
-        /*
-        mainHandler.post {
-            callManager.acceptCall()
+        val prefs = getSharedPreferences("VoidPrefs", Context.MODE_PRIVATE)
+        val treatContactsAsKnown = prefs.getBoolean("treat_contacts_as_known", true)
+        val screenUnknown = prefs.getBoolean("screen_unknown_callers", false)
+        val answerDelaySec = prefs.getInt("auto_answer_delay_sec", 3)
+        val routeMode = prefs.getString("audio_route_mode", "bluetooth") ?: "bluetooth"
+
+        val contactName = if (treatContactsAsKnown) {
+            ContactHelper.lookupContactName(this, number)
+        } else null
+
+        val isWhitelisted = whitelistManager.isWhitelisted(number)
+        val isKnown = (contactName != null) || isWhitelisted
+
+        Log.i(TAG, "Incoming call: $number, contactName=$contactName, isWhitelisted=$isWhitelisted -> isKnown=$isKnown")
+
+        val payload = mutableMapOf<String, Any>(
+            "number" to number,
+            "known" to isKnown
+        )
+        if (!contactName.isNullOrBlank()) {
+            payload["contact_name"] = contactName
         }
-        */
+
+        wsClient.sendEvent("incoming_call", payload)
+
+        // Cancel any pending auto-answer runnable
+        autoAnswerRunnable?.let { mainHandler.removeCallbacks(it) }
+        autoAnswerRunnable = null
+
+        if (isKnown) {
+            Log.i(TAG, "Caller is known ($contactName). Letting phone ring normally.")
+            return
+        }
+
+        // Unknown caller
+        if (!screenUnknown) {
+            Log.i(TAG, "Screen unknown callers is DISABLED. Letting phone ring normally.")
+            return
+        }
+
+        if (!wsClient.isWsConnected()) {
+            Log.w(TAG, "Relay PC is DISCONNECTED from WebSocket. Bypassing auto-answer to avoid dropped calls.")
+            return
+        }
+
+        Log.i(TAG, "Scheduling auto-answer for unknown caller in ${answerDelaySec}s...")
+        val runnable = Runnable {
+            Log.i(TAG, "Executing auto-answer for unknown caller $number")
+            try {
+                callManager.acceptCall()
+                audioRouter.applyCallRouting(routeMode)
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to auto-answer ringing call", e)
+            }
+        }
+        autoAnswerRunnable = runnable
+        mainHandler.postDelayed(runnable, (answerDelaySec * 1000L).coerceAtLeast(0L))
     }
 
     fun notifyCallStarted(number: String) {
         Log.i(TAG, "Call started: $number")
-        audioRouter.enableBluetoothSco()
+        autoAnswerRunnable?.let { 
+            mainHandler.removeCallbacks(it)
+            autoAnswerRunnable = null
+        }
+        val prefs = getSharedPreferences("VoidPrefs", Context.MODE_PRIVATE)
+        val routeMode = prefs.getString("audio_route_mode", "bluetooth") ?: "bluetooth"
+        audioRouter.applyCallRouting(routeMode)
+
         val callId = pendingCallId ?: java.util.UUID.randomUUID().toString()
         activeCallId = callId
         pendingCallId = null
@@ -133,7 +193,11 @@ class ConnectionService : Service(), WebSocketClient.WsListener {
 
     fun notifyCallEnded() {
         Log.i(TAG, "Call ended")
-        audioRouter.disableBluetoothSco()
+        autoAnswerRunnable?.let {
+            mainHandler.removeCallbacks(it)
+            autoAnswerRunnable = null
+        }
+        audioRouter.resetRouting()
         val callId = activeCallId ?: ""
         activeCallId = null
         pendingCallId = null

@@ -34,7 +34,14 @@ pub enum WsEvent {
     AgentModeChanged { enabled: bool, client: String },
     
     #[serde(rename = "incoming_call")]
-    IncomingCall { number: String, client: String },
+    IncomingCall {
+        number: String,
+        client: String,
+        #[serde(default)]
+        known: Option<bool>,
+        #[serde(default)]
+        contact_name: Option<String>,
+    },
     
     #[serde(rename = "heartbeat")]
     Heartbeat { client: String },
@@ -201,9 +208,9 @@ impl WsServer {
                 log::info!("Agent mode {} on {}", if enabled {"ON"} else {"OFF"}, client);
                 let _ = app.emit("agent_mode", serde_json::json!({"platform": client, "enabled": enabled}));
             }
-            WsEvent::IncomingCall { number, client } => {
-                log::info!("Incoming call on {}: {}", client, number);
-                orch.handle_incoming_call(number, client).await;
+            WsEvent::IncomingCall { number, client, known, contact_name } => {
+                log::info!("Incoming call on {}: {} (known: {:?}, contact: {:?})", client, number, known, contact_name);
+                orch.handle_incoming_call(number, client, known, contact_name).await;
             }
         }
     }

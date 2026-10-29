@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAppStore } from '../stores/appStore';
 import { useCallStore } from '../stores/callStore';
 import { useConfigStore } from '../stores/configStore';
-import { Smartphone, Bluetooth, Activity, Database, Globe, WifiOff } from 'lucide-react';
+import { Smartphone, Bluetooth, Activity, Database, Globe, WifiOff, UserCheck } from 'lucide-react';
 import { invoke } from '@tauri-apps/api/core';
 import { listen } from '@tauri-apps/api/event';
 
@@ -77,6 +77,14 @@ export default function Dashboard() {
     }
   };
 
+  const handleTakeOver = async () => {
+    try {
+      await invoke('take_over_call');
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const cycleMode = () => {
     const modes: ('online' | 'offline' | 'auto')[] = ['auto', 'online', 'offline'];
     const currentIdx = modes.indexOf(config.ai_mode);
@@ -122,7 +130,7 @@ export default function Dashboard() {
           title="Live Call Status" 
           value={callState}
           subtitle={activeNumber ? `Calling ${activeNumber}` : ''}
-          status={callState === 'IDLE' || callState === 'ENDED' ? 'idle' : callState === 'CONNECTED' ? 'active' : 'warning'} 
+          status={callState === 'IDLE' || callState === 'ENDED' ? 'idle' : callState === 'CONNECTED' || callState === 'SCREENING' ? 'active' : 'warning'} 
         />
       </div>
 
@@ -137,7 +145,21 @@ export default function Dashboard() {
             <div className="flex justify-between items-center mb-6 z-10">
               <h3 className="text-xl font-semibold">Live Session</h3>
               {callState !== 'IDLE' && callState !== 'ENDED' && (
-                <div className="flex gap-3">
+                <div className="flex gap-3 items-center">
+                  {callState !== 'HANDOFF' ? (
+                    <button 
+                      onClick={handleTakeOver} 
+                      className="px-4 py-2 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-lg hover:bg-amber-500/30 transition-colors font-semibold flex items-center gap-1.5"
+                    >
+                      <UserCheck className="w-4 h-4" />
+                      Take Over Call
+                    </button>
+                  ) : (
+                    <span className="px-3 py-1.5 bg-emerald-500/20 text-emerald-300 text-xs font-semibold rounded-lg border border-emerald-500/30 flex items-center gap-1.5">
+                      <UserCheck className="w-4 h-4" />
+                      Human In Control (Handoff Active)
+                    </span>
+                  )}
                   <button onClick={handleHangup} className="px-4 py-2 bg-danger/20 text-danger border border-danger/30 rounded-lg hover:bg-danger/30 transition-colors font-semibold">
                     End Call
                   </button>

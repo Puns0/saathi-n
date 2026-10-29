@@ -9,8 +9,8 @@ export interface PhoneDevice {
 }
 
 interface AppState {
-  activeTab: 'dashboard' | 'history' | 'models' | 'settings';
-  setActiveTab: (tab: 'dashboard' | 'history' | 'models' | 'settings') => void;
+  activeTab: 'dashboard' | 'history' | 'models' | 'settings' | 'diagnostics';
+  setActiveTab: (tab: 'dashboard' | 'history' | 'models' | 'settings' | 'diagnostics') => void;
   
   phones: PhoneDevice[];
   addPhone: (phone: PhoneDevice) => void;

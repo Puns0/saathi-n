@@ -34,6 +34,7 @@ class MainActivity : ComponentActivity() {
             Manifest.permission.ANSWER_PHONE_CALLS,
             Manifest.permission.MANAGE_OWN_CALLS,
             Manifest.permission.READ_CALL_LOG,
+            Manifest.permission.READ_CONTACTS,
             Manifest.permission.BLUETOOTH,
             Manifest.permission.BLUETOOTH_ADMIN,
             Manifest.permission.MODIFY_AUDIO_SETTINGS
